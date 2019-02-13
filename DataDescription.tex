@@ -231,7 +231,6 @@ Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the norma
 \noindent Figure \ref{index_levels} presents each asset class indexed with July 31 1983=100
 
 
-the development of each asset class during the considered period with .  
 
    
 
@@ -248,30 +247,29 @@ the development of each asset class during the considered period with .
 \begin{figure}[ht]
 \center
 \caption{Index values for US asset classes 1983-2018}
-\vspace{-4.9mm}
+\vspace{-0mm}
 \label{index_levels}
-\includegraphics[scale=0.5]{images/index_abs.png}
+\includegraphics[scale=1]{images/Prices.pdf}
 \begingroup
 \subcaption*{\textit{Source: Bloomberg}}
 \endgroup
 \end{figure}
 
 
+\clearpage
 
-
-
+\begin{figure}[p]
+    \caption{Monthly excess returns}
+    \makebox[\linewidth]{
+        \includegraphics[width=1\linewidth, height=0.85\textheight]{images/ExcessReturns.pdf}
+    }
+\end{figure}
 
 \clearpage
 
 
 \noindent The graphical inspection in figure \ref{mth_returns}-\ref{autocorr} shows that all returns, to some extent, exhibit volatility clustering. That is especially clear around the peak of the financial crisis in 2008-09 and for most asset classes also in the mid-late 1980's probably explained by "black Monday in 1987" and "black Friday in 1989". Furthermore, a graphical comparison of returns to their corresponding normal distributions indicates that returns are non-normal and are negatively skewed with fat tails. The (linear) auto correlation functions of returns indicates very little to no auto correlation at all. The conclusion to the graphical inspection is that the data exhibit the stylised facts for financial data, i.e. heavy tails, absence of auto correlation but with non-linear dependencies (among others through the second moment)\cite{Cont}.  
 
-
-
-%\subsection*{High-Yield Bond Index}
-%\noindent High-Yield (HY) bonds are corporate bonds, which middle rating of Moody's, Fitch and S\&P, is Ba1/BB+/BB+ or below. Pre the 80's HY bonds were bonds of outstanding fallen angles. I.e former investment grade companies that had been downgraded. Today HY bonds are often used to finance strategic mergers and acquisitions or  by leveraged-buy-out firms to provide means of capital for highly leveraged companies. From 1998 to 2018 the US HY bond market expanded almost six fold\cite{Pimpco}. According to Bloomberg the current total size of the US corporate debt market is \$7.5 trillion of which 16.1\% (\$1.21 trillion) are HY bonds. Leveraged Loans represent roughly the same as high yield bonds, while the remaining 68\% are investment grade bonds\cite{Bloomberg}. We have chosen not to include leveraged loans in our analysis due to lack of historical data. We are aware that leveraged loans and HY bonds are not perfect substitutes for an investor, however we believe that they are similar enough to not affect conclusions substantially.              
-
-%We will work with the "Bloomberg Barclays US Corporate High Yield Total Return Index (LF98TRUU:IND)", which we will refer to as the "HY index". The index is an unhedged \$ index, comprised of HY bonds denominated in \$ with a mininum size of \$150mn. The index dates back to july 1983 for monthly data and to august 1998 with daily data. Historically this index have returned 0.73\% per month with volatility of 2.37\% with corresponding historical annualised moments of 8.7\% and 8.2\%. Returns are negatively skewed with heavy very tails. The latter is likely due to a few extreme observations as the -15.9\% return in October 2008 and the +12.1\% return in April 2009.   
 
 
 
@@ -283,91 +281,6 @@ the development of each asset class during the considered period with .
   
 \clearpage  
   
-\begin{table}[ht]
-\centering
-\captionsetup{justification=centering,margin=0.6cm}
-\caption{\text{Descriptive monthly return statistics (Aug. 1983 - Dec. 2018)}}
-\label{return_stats}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{c|cccccccc}
-\toprule
-    \textbf{\begin{tabular}[c]{@{}c@{}}  \end{tabular}}                     &   
-    \textbf{\begin{tabular}[c]{@{}c@{}} S\&P    \\ 500 \end{tabular}}       &  
-    \textbf{\begin{tabular}[c]{@{}c@{}} Russell \\ 1000 \end{tabular}}      & 
-    \textbf{\begin{tabular}[c]{@{}c@{}} Russell \\ 2000 \end{tabular}}      & 
-    \textbf{\begin{tabular}[c]{@{}c@{}} IG      \\ Index \end{tabular}}     &
-    \textbf{\begin{tabular}[c]{@{}c@{}} HY      \\ Index \end{tabular}}     &
-    \textbf{\begin{tabular}[c]{@{}c@{}} Comm.   \\ Index \end{tabular}}    
-    \\ \midrule
-       \begin{tabular}[c]{@{}c@{}}Arithmetic Avg. \\  Returns\end{tabular} &
-        0.94\%                  &
-        0.84\%                  &
-        0.24\%                  &
-        0.64\%                  &
-        0.73\%                  &
-        0.34\%
-    
-    \\ \hline
-         \begin{tabular}[c]{@{}c@{}} Standard \\ deviation (vol)    \end{tabular}      &
-        4.24\%                 &
-        4.27\%                 &
-        5.46\%                 &
-        1.59\%                 &
-        2.37\%                 &
-        4.10\%
-    \\ \hline
-     \begin{tabular}[c]{@{}c@{}} Annualised \\ returns                   \end{tabular}           &
-        11.3\%                 &
-        10.1\%                 &
-        9.6\%                  &
-        7.6\%                  &
-        8.7\%                  &
-        4.1\%
-    \\ \hline
-     \begin{tabular}[c]{@{}c@{}} Annualised \\ standard deviation      \end{tabular}          &
-        14.7\%                 &
-        14.8\%                 &
-        18.9\%                 &
-        5.5\%                  &
-        8.2\%                  &
-        14.2\%
-    \\ \hline
-      \begin{tabular}[c]{@{}c@{}} Annualised \\ Sharpe ratio        \end{tabular}            &
-        0.53                  &
-        0.45                  &
-        0.32                  &
-        0.75                  &
-        0.64                  &
-        0.04
-    \\ \hline
-      \begin{tabular}[c]{@{}c@{}}Skewness                    \end{tabular}            &
-        -0.76                  &
-        -0.80                  &
-        -0.82                  &
-        -0.29                  &
-        -0.89                  &
-        -0.35
-    \\ \hline
-      \begin{tabular}[c]{@{}c@{}}Excess \\ Kurtosis                    \end{tabular}            &
-        2.57                   &
-        2.65                   &
-        3.07                   &
-        3.27                   &
-        8.96                   &
-        2.25
-    \\ \hline
-      \begin{tabular}[c]{@{}c@{}} P-value for \\ normality test                    \end{tabular}            &
-        xx                   &
-        xx                   &
-        xx                   &
-        xx                   &
-        xx                   &
-        xx
-    \\ \hline
-\end{tabular}}
-\caption*{\small{\textit{Source: Bloomberg, Fama-French and own calculations. Annualised risk free return over same period is 3.5\%. All returns presented above include the risk free return.}}}
-\vspace{-50mm}
-\end{table}
 
 
 \clearpage
@@ -377,7 +290,7 @@ the development of each asset class during the considered period with .
 \caption{Monthly returns from 1983-2018}
 \vspace{-0mm}
 \label{mth_returns}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/mth_returns.png}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/ExcessReturns.pdf}
 \begingroup
 \vspace{-14mm}
 \subcaption*{\textit{Source: Bloomberg and own calculations}}
@@ -391,7 +304,7 @@ the development of each asset class during the considered period with .
 \caption{Monthly volatility from 1983-2018}
 \vspace{-0mm}
 \label{mth_vol}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/mth_vol.png}
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/Vol.png}
 \begingroup
 \vspace{-14mm}
 \subcaption*{\textit{Source: Bloomberg and own calculations}}
