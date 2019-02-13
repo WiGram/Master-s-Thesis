@@ -203,10 +203,12 @@ where $a \in \{1,2,...,A\}$ denotes asset class a. Additionally, we will conside
     \text{ACF}_a(h,r_t)&= \frac{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}})(r_{t-h,a}-\hat{\Bar{r}})}{\sqrt{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}})^2}\sqrt{\frac{1}{T}\sum_{t=1}^{T}(r_{t-h,a}-\hat{\Bar{r}})^2}} \label{acf} ,  \\
     \text{ACF}_a(h,\vert {r_t} \vert) &= \frac{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t,a} \vert-\vert\hat{\Bar{r}}\vert)(\vert r_{t-h,a}\vert-\vert\hat{\Bar{r}}\vert)}{\sqrt{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t,a}\vert-\vert\hat{\Bar{r}}\vert)^2}\sqrt{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t-h,a}\vert-\vert\hat{\Bar{r}}\vert)^2}} \label{acfabs}. 
 \end{align}
-Applying the moment estimates as defined in equation (\ref{meanvol})-(\ref{skewkurt}) to the monthly excess returns we generate table \ref{descriptive_statistics}. Monthly mean returns 
+
+\noindent Applying the moment estimates as defined in equation (\ref{meanvol})-(\ref{skewkurt}) to the monthly excess returns we generate table \ref{descriptive_statistics}. Monthly excess mean returns span from -0.04\% for the commodity index to 0.55\% for S\&P500. The monthly standard deviation spans between 1.6\% for the IG index to 5.6\% for Russell 2000. All asset classes exhibit negative skewness in returns while the excess kurtosis indicates heavy tails of the return distribution. These findings are in line with literature in financial time series e.g. Taylor (2011)\cite{Taylor}.           
 
 \begin{table}[h!]
 \centering
+\captionsetup{justification=centering,margin=0.6cm}
 \caption{Descriptive summary of monthly excess returns}
 \label{descriptive_statistics}
 \begin{tabular}{lrrrrrr}
@@ -222,10 +224,14 @@ S\&P 500          &  0.5522 &  4.2869 &     6.6258 &   14.8501 &    3.8178 &   -
 Risk Free        &  0.2931 &  0.2324 &     3.5167 &    0.8050 &   -0.8818 &    0.3011 \\
 \bottomrule
 \end{tabular}
-    \label{returnstats}
+\caption*{Source: Bloomberg and Kenneth French data base.
+Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the normal distribution}
 \end{table}
 
+\noindent Figure \ref{index_levels} presents each asset class indexed with July 31 1983=100
 
+
+the development of each asset class during the considered period with .  
 
    
 
@@ -235,10 +241,6 @@ Risk Free        &  0.2931 &  0.2324 &     3.5167 &    0.8050 &   -0.8818 &    0
 
 
 
-
-
-
-%Table \ref{return_stats} presents descriptive statistics of all these asset classes while figure \ref{index_levels} is a plot of the different index values over the considered period. All data expect for the risk free return is collected from Bloomberg.
 
 
 \clearpage
@@ -255,6 +257,11 @@ Risk Free        &  0.2931 &  0.2324 &     3.5167 &    0.8050 &   -0.8818 &    0
 \end{figure}
 
 
+
+
+
+
+\clearpage
 
 
 \noindent The graphical inspection in figure \ref{mth_returns}-\ref{autocorr} shows that all returns, to some extent, exhibit volatility clustering. That is especially clear around the peak of the financial crisis in 2008-09 and for most asset classes also in the mid-late 1980's probably explained by "black Monday in 1987" and "black Friday in 1989". Furthermore, a graphical comparison of returns to their corresponding normal distributions indicates that returns are non-normal and are negatively skewed with fat tails. The (linear) auto correlation functions of returns indicates very little to no auto correlation at all. The conclusion to the graphical inspection is that the data exhibit the stylised facts for financial data, i.e. heavy tails, absence of auto correlation but with non-linear dependencies (among others through the second moment)\cite{Cont}.  
