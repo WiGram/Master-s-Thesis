@@ -1,0 +1,265 @@
+% !TeX spellcheck = da_DK
+\documentclass[11pt,a4paper,oneside]{article}
+
+% Overordnet opsætning
+\setlength\parindent{24pt}
+\setlength\parskip{3pt}
+\setlength{\headheight}{14pt}
+\renewcommand{\baselinestretch}{1.5}
+
+\usepackage[utf8]{inputenc}
+\usepackage[danish,english]{babel}
+\usepackage{amsfonts,amsmath} %math: align og gather mm.; fonts: flere forskellige symboler
+\usepackage[left=2cm, right=2cm, bottom=2cm]{geometry}
+\usepackage{enumitem} %anvendes til Ã¦ndring i itemize mm.
+\usepackage{fancyhdr} %Opsaening af sidehoved og -fod
+\usepackage{lastpage} % Side "x af X".
+\usepackage[ocgcolorlinks,linkcolor=black]{hyperref}
+\usepackage{indentfirst} %"Indent" efter section og chapters etc.
+\usepackage{graphicx} % for plotting graphs in matrix
+\usepackage{subcaption} % figure "footnotes"
+\usepackage[font=small,compatibility=false]{caption}
+\usepackage[nottoc,numbib]{tocbibind}    
+\usepackage{ mathrsfs }
+\usepackage{bbold}
+
+% bibliography
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+% Ændring af titler
+\usepackage{sectsty}
+\subsectionfont{\normalfont\bfseries}
+\subsubsectionfont{\itshape}
+
+%Rstudio pakker
+\usepackage[svgnames]{xcolor}
+\usepackage{listings}
+
+\lstset{language=R,
+basicstyle=\scriptsize\ttfamily,
+commentstyle=\ttfamily\color{gray},
+numbers=left,
+numberstyle=\ttfamily\color{gray}\footnotesize,
+stepnumber=1,
+numbersep=5pt,
+backgroundcolor=\color{white},
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+frame=single,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+breakatwhitespace=false,
+title=\lstname,
+escapeinside={},
+keywordstyle={},
+morekeywords={}
+}
+
+% fancy table
+\usepackage{booktabs}
+\usepackage{multirow}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\rightmark}
+\lfoot{\author}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%symbolforkortelser
+\newcommand{\lll}{\mathcal{L}}
+\newcommand{\LL}{\Leftrightarrow}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\rb}{\right]}
+\newcommand{\lb}{\left[}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\cc}{\mathbb{C}}
+\newcommand{\aaa}{\mathbf{A}}
+\newcommand{\ee}{\mathbf{E}}
+\newcommand{\ff}{\mathcal{F}}
+\newcommand{\ggg}{\mathcal{G}}
+\newcommand{\hh}{\mathcal{H}}
+\newcommand{\pp}{\mathcal{P}}
+\newcommand{\qq}{\mathcal{Q}}
+\newcommand{\vv}{\mathbf{V}}
+\newcommand{\rr}{\mathbf{R}}
+\newcommand{\nn}{\mathbf{N}}
+\newcommand{\zz}{\mathbf{Z}}
+\newcommand{\yy}{\mathbf{Y}}
+\newcommand{\nnn}{\mathcal{N}}
+\newcommand{\ii}{\mathbf{1}}
+\newcommand{\bs}{\text{BS}}
+\newcommand{\sumn}{\sum_{i=1}^n}
+\renewcommand{\theequation}{1.\arabic{equation}}
+\DeclareMathOperator*{\argmin}{\arg\,\min}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\selectlanguage{english}
+
+\lstset{language=R}
+
+% Environment for theorems etc.
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}{Assumption}
+\newtheorem{proof}{Proof}
+\newtheorem{mydef}{Definition}
+
+% Colour citation links (otherwise they are luminescent green)
+\hypersetup{colorlinks,linkcolor={black},citecolor={black},urlcolor={black}} 
+
+% TOC depth
+\setcounter{tocdepth}{2}
+
+\title{Note: Extending the standard Hidden Markov Model}
+\author{William Gram \& Kristian Strand}
+\date{\today}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+
+\newpage
+
+\pagenumbering{roman}
+\rfoot{\thepage}
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Exogenous extension to HMM}
+\noindent In the following section we will extend the hidden markov model (HMM) to include an exogenous regressor. The model we consider is thus on the form:
+\begin{align}
+    Y_t=\mu_{s_t}+\beta X_t+\epsilon_t, \quad \epsilon_t \sim N(0,\Sigma{s_t}), 
+\end{align}
+where $Y_t=(y_{1t},y_{2t},..,y_{At})'$ is a vector of returns at time t on the A different asset classes. $X_t$ is an exogenous regressors and $S_t$ is the state variable which, for simplicity, can be in one of 2 states at time t. Following the note "Finite State SV: EM-algorithm-based Estimation" Rahbek \& Pedersen (2017), we start out by treating the state variable as observed. We treat the exogenous variable as independent of the state such that $f(x\vert s)=f(x)$ and we assume $X_t$ to follow an AR(1) process. In the following, $\theta$ is the set of parameters to be estimated. The likelihood function can then be computed as (where we ignore the initial density at first):
+\begin{align}
+    &f_\theta(Y_{1:T},S_{1:T},X_{1:T})=f_\theta(y_1,...,y_T,s_1,...,s_T,X_1...,X_T) \notag \\
+    =&f_\theta(Y_T\vert S_{1:T},X_{1:T},Y_{1:T-1})f_\theta(S_{1:T},X_{1:T},Y_{1:T-1}) \notag \\
+    =&f_\theta(Y_T\vert S_T,X_T)f_\theta(X_T\vert S_{1:T},X_{1:T-1},Y_{1:T-1})f_\theta(S_{1:T},X_{1:T-1},Y_{1:T-1}) \notag \\
+    =&f_\theta(Y_T\vert S_T,X_T)f_\theta(X_T\vert X_{T-1})f_\theta(S_{1:T},X_{1:T-1},Y_{1:T-1}) \notag \\
+    =&f_\theta(Y_T\vert S_T,X_T)f_\theta(X_T\vert X_{T-1})f_\theta(S_{T}\vert S_{1:T-1})f_\theta(S_{T-1},X_{1:T-1},Y_{1:T-1}) \notag \\\
+    &\vdots \notag \\
+    =&\prod_{t=2}^{T} f_\theta(Y_t\vert S_t,X_t)f_\theta(X_t\vert X_{t-1})f_\theta(S_t\vert S_{t-1}).
+\end{align}
+With the initial density $f(x_1,s_1,y_1)$, which can be factorized as above, we have:
+\begin{align}\label{likelihoodfct}
+    =f(y_1\vert s_1,x_1)f(x_1)f(s_1)\prod_{t=2}^{T} f_\theta(Y_t\vert S_t,X_t)f_\theta(X_t\vert X_{t-1})f_\theta(S_t\vert S_{t-1}).
+\end{align}
+We now need to evaluate the densities in (1.3):
+\begin{enumerate}
+    \item $f_\theta(Y_t\vert S_t,X_t)=f(y_t\vert x_t,s_t=1)^{\mathbb{1}_{s_t=1}}f(y_t\vert x_t,s_t=2)^{\mathbb{1}_{s_t=1}}$
+    \item $f_\theta(X_t\vert X_{t-1})=\frac{1}{\sqrt{2\pi\sigma_x^2}}\exp{\{-\frac{1}{2}(\frac{x_t-\rho x_{t-1}}{\sigma_x})^2\}}$, assuming $x_t$ follows and AR(1) process
+    \item $f_\theta(S_t\vert S_{t-1})=p_{11}^{\mathbb{1}_{11}}p_{22}^{\mathbb{1}_{22}}p_{12}^{\mathbb{1}_{12}}p_{21}^{\mathbb{1}_{21}}$
+\end{enumerate}
+At time t, (\ref{likelihoodfct}) can then be computed as (ignoring the initial density): 
+\begin{align}\label{likelihoodcon}
+    &f(Y_t\vert S_t,X_t)f(X_t\vert X_{t-1})f(S_t\vert S_{t-1}) = f(y_t\vert x_t,s_t=1)^{\mathbb{1}_{s_t=1}}f(y_t\vert x_t,s_t=2)^{\mathbb{1}_{s_t=2}}f(x_t\vert x_{t-1})p_{11}^{\mathbb{1}_{11}}p_{22}^{\mathbb{1}_{22}}p_{12}^{\mathbb{1}_{12}}p_{21}^{\mathbb{1}_{21}} \notag \\ 
+    &= f(x_t\vert x_{t-1}) \lb p_{11}f(y_t\vert x_t,s_t=1) \rb^{\mathbb{1}_{11}} \lb p_{22}f(y_t\vert x_t,s_t=2) \rb^{\mathbb{1}_{22}} \lb p_{12}f(y_t\vert x_t,s_t=2) \rb^{\mathbb{1}_{12}} \lb p_{21}f(y_t\vert x_t,s_t=1) \rb^{\mathbb{1}_{21}}  \notag \\
+    &=f(x_t\vert x_{t-1})\prod_{i=1}^{2}\lb p_{i1}f(y_t\vert x_t,s_t=1) \rb^{\mathbb{1}_{i2}}\lb p_{1i}f(y_t\vert x_t,s_t=1) \rb^{\mathbb{1}_{i2}}  \notag \\
+    &=f(x_t\vert x_{t-1})\prod_{i,j=1}^{2}\lb p_{ij}f(y_t\vert x_t,s_t=j) \rb^{\mathbb{1}_{ij}} 
+\end{align}
+The likelihood function for all t is then found by multiplying the likelihood contribution a time t in (\ref{likelihoodcon}) for all t: 
+\begin{align}\label{likelihood2stage}
+    f_\theta(Y_T,S_T,X_T)=\prod_{t=2}^{T}f(x_t\vert x_{t-1})\prod_{i,j=1}^{2}\lb p_{ij}f(y_t\vert x_t,s_t=j) \rb^{\mathbb{1}_{ij}}
+\end{align}
+(\ref{likelihood2stage}) holds only for the 2-state model, but can easily be generalised to an N-state model:
+\begin{align}\label{likelihoodNstage}
+    f_\theta(Y_T,S_T,X_T;\theta)=\underbrace{\prod_{j=1}^{N}\lb f(s_1)f_\theta(y_1\vert x_1,s_1=j) \rb^{\mathbb{1}_{s_1=j}}f(x_1\vert x_0)}_{\text{Initial distribution}}\prod_{t=2}^{T}f(x_t\vert x_{t-1})\prod_{i,j=1}^{2}\lb p_{ij}f_\theta(y_t\vert x_t,s_t=j) \rb^{\mathbb{1}_{ij}}.
+\end{align}
+We now proceed by taking logs to (\ref{likelihoodNstage}) to obtain the full log-likelihood function in terms of $Y_T$,$S_T$ and $X_T$. This can be written as:
+\begin{align}\label{loglikNstage}
+    &L(Y_T,S_T,X_T;\theta)=\log(f_\theta(Y_T,S_T,X_T;\theta)) \notag \\
+    &=\sum_{j=1}^{N}( \mathbb{1}_{s_1=j}(\log(f(s_1))+\log(f_\theta(y_1\vert x_1,s_1=j)))+\log(f_\theta(x_1))) \notag \\ 
+    &+\sum_{t=2}^{T}(\log(f(x_t\vert x_{t-1})))+\sum_{i,j=2}^{N}(\mathbb{1}_{ij}(\log(p_{ij})+\log(f_\theta(y_t\vert x_t,s_t=j)))) \notag \\
+    &= \sum_{j=1}^{N}\mathbb{1}_{s_1=j}\log(f(s_1))+\sum_{t=1}^{T}\log f_\theta(x_t\vert x_{t-1})+\sum_{t=2}^{T}\sum_{i,j=1}^{N}\log(p_{ij})\mathbb{1}_{\{s_{t-1}=i,s_t=j\}} \notag \\
+    &+\sum_{t=1}^{T}\sum_{j=1}^{N}\mathbb{1}_{s_t=j}\log(f_\theta(y_t\vert x_t,s_t=j)) \notag \\
+    &=c+\sum_{t=1}^{T}(\log f_\theta(x_t\vert x_{t-1})+\sum_{j=1}^{N}\mathbb{1}_j\log(f_\theta(y_t\vert x_t,s_t=j)))+\sum_{t=2}^{T}\sum_{i,j=1}^{N}\log(p_{ij})\mathbb{1}_{ij},
+\end{align}
+where $c$ is some positive constant as $f(s_1)$ and $f(x_1)$ are considered known.
+
+\subsection{The E-step}
+\noindent As we shall estimate parameters through the EM-algorithm, let $\Tilde{\theta}$ be an initial guess of the parameters maximising the likelihood function, and take the expectation to (\ref{loglikNstage}): \begin{align}\label{Lem}
+   &L_{EM}(Y_T,X_T;\theta) = \mathbb{E}_{\Tilde{\theta}} \lb L(Y_T,S_T,X_T;\theta \vert Y_T,X_T) \rb \notag \\
+   &=c+\sum_{t=1}^{T}(\log f_\theta(x_t\vert x_{t-1})+\sum_{j=1}^{N}\mathbb{E}\lb \mathbb{1}_j \rb\log(f_\theta(y_t\vert x_t,s_t=j)))+\sum_{t=2}^{T}\sum_{i,j=1}^{N}\log(p_{ij})\mathbb{E}\lb\mathbb{1}_{ij}\rb \notag \\
+   &= c+\sum_{t=1}^{T}\lb \log f_\theta(x_t\vert x_{t-1})+\sum_{j=1}^{N}p_t^*(j)  \log(f_\theta(y_t\vert x_t,s_t=j))\rb+\sum_{t=2}^{T}p_t^*(i,j)\sum_{i,j=1}^{N}\log(p_{ij}),
+\end{align}
+where $p_t^*(i,j)=P_{\Tilde{\theta}}\lb s_{t-1}=i,s_t=j\vert Y_T,X_T \rb$ and $p_t^*(j)=P_{\Tilde{\theta}}\lb s_t=j\vert Y_T,X_T \rb$. $p_t^*(i,j)$ is is the smoothed transition probabilities while $p_t^*(j)$ is the smoothed probabilities.
+ 
+\subsection{The M-step}
+
+\noindent With $Y_t$ being a conditional multivariate normal distribution and $X_t$ an AR(1) process which is conditionally normal, we have:
+\begin{align}
+    f_\theta(Y_t\vert X_t,S_t=j)&= \frac{1}{\sqrt{2\pi^A \det(\Sigma_{S_t})}}\exp{\lc-\frac{1}{2}(Y_t-\mu_{S_t}-\beta X_t)'\Sigma_{S_t}^{-1}((Y_t-\mu_{S_t}-\beta X_t))\rc}. \\
+    f_\theta(X_t\vert X_{t-1})&= \frac{1}{\sqrt{2\pi\sigma_x^2}}\exp{\lc-\frac{1}{2}\lp\frac{X_t-\rho X_{t-1}}{\sigma_x^2}\rp^2\rc},
+\end{align}
+where $X_t=\rho X_{t-1}+\epsilon_t^x, \quad \epsilon_t^x\sim iidN(0,\sigma_x^2)$. We now proceed by taking logs to the two expressions above: 
+\begin{align}
+    \log(f_\theta(Y_t\vert X_t,S_t=j))&=-\frac{1}{2}\lp A\log(2\pi)+ \log(\det(\Sigma_{S_t}))+(Y_t-\mu_{S_t}-\beta X_t )'\Sigma_{S_t}^{-1}((Y_t-\mu_{S_t}-\beta X_t)) \rp \\
+    \log(f_\theta(X_t\vert X_{t-1}))&=-\frac{1}{2}\lp \log( (2\pi\sigma_x^2))+\lp\frac{X_t-\rho X_{t-1}}{\sigma_x^2}\rp^2 \rp.
+\end{align}
+Plugging the two expressions into (\ref{Lem}) we can now maximise (\ref{Lem}) over $\theta$ keeping $p_t^*(i,j)$ and $p_t^*(j)$ constant and hence find the parameter estimates.    
+
+\subsection{Computing $p_t^*(i,j)$ and $p_t^*(j)$ - The forward-backward algorithm}
+
+
+\noindent In the following we will modify the forward-backward algorithm to take the exogenous variable into account, when computing $p_t^*(i,j)$ and $p_t^*(j)$. Observe that for any t,
+\begin{align}
+    &L(Y_T,X_t;\theta)=\sum_{i=1}^{N}f(Y_{t+1:T},X_{t+1:T}\vert Y_{1:t},X_{1:t},s_t=i;\theta)f(Y_{1:t},X_{1:t},s_t=i) \notag \\
+    &=\sum_{j=1}^{N}\underbrace{f(Y_{t+1:T},X_{t+1:T}\vert X_t,s_t=i;\theta)}_{b_t(i)}\underbrace{f(Y_{1:t},X_{1:t},s_t=i)}_{a_t(i)}.
+\end{align}
+The main idea here is, that we cab use $a_t$ and $b_t$ to compute the smoothed probabilities, which we shall see soon. Before that we compute $a_t(j)$ and $b_t(j)$ on a recursive form:
+\begin{align}
+    a_t(i)&=f(Y_{1:t},X_{1:t},s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_{1:t},X_{1:t},s_{t-1}=j,s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert Y_{1:t-1},X_{1:t},s_{t-1}=j,s_t=i)f( Y_{1:t-1},X_{1:t},s_{t-1}=j,s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert X_t,s_t=j)f(X_t \vert Y_{1:t-1},X_{1:t-1},s_{t-1}=j,s_t=i)f(Y_{1:t-1},X_{1:t-1},s_{t-1}=j,s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert X_t,s_t=i)f(X_t \vert X_{t-1})f(Y_{1:t-1},X_{1:t-1},s_{t-1}=j,s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert X_t,s_t=i)f(X_t \vert X_{t-1})f(s_t=i\vert s_{t-1}=j,Y_{1:t-1},X_{1:t-1})\underbrace{f(s_{t-1}=j,Y_{1:t-1},X_{1:t-1})}_{a_{t-1}(j)} \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert X_t,s_t=i)f(X_t \vert X_{t-1})f(s_t=i\vert s_{t-1}=j)a_{t-1}(i) \notag \\
+          &=\sum_{i=1}^{N}f(Y_t \vert X_t,s_t=i)f(X_t \vert X_{t-1})p_{ij}a_{t-1}(i)
+\end{align}
+\begin{align}
+    b_t(i)&=f(Y_{t+1:T},X_{t+1:T}\vert X_t,s_t=i) \notag \\
+          &=\sum_{i=1}^{N}f(S_{t+1}=i,Y_{t+1:T},X_{t+1:T}\vert X_t,s_t=j) \notag \\
+          &=\sum_{i=1}^{N}f(Y_{t+1}\vert S_{t+1}=i,S_t=j,Y_{t+2:T},X_{t+1:T})f(Y_{t+2:T},X_{t+1:T},S_{t+1}=i\vert s_t=j) \notag \\
+          &=\sum_{i=1}^{N}f(Y_{t+1}\vert S_{t+1}=i,X_{t+1})f(Y_{t+2:T},X_{t+2:T}\vert S_{t+1}=i,S_t=j,X_{t+1})f(X_{t+1},S_{t+1}=i\vert S_t=j) \notag \\
+          &=\sum_{i=1}^{N}f(Y_{t+1}\vert S_{t+1}=i,X_{t+1})f(Y_{t+2:T},X_{t+2:T}\vert S_{t+1}=i,X_{t+1})f(X_{t+1})f(S_{t+1}=i\vert S_t=j) \notag \\
+          &=\sum_{i=1}^{N}f(Y_{t+1}\vert S_{t+1}=i,X_{t+1})b_{t+1}(i)f(X_{t+1})p_{ij}
+\end{align}
+What is left to be shown now, is how to compute the smoothed probabilities, $p_t^*(i,j)$ and $p_t^*(j)$, using $a_t(j)$ and $b_t(j)$. Using the definition of $p_t^*(j)$ (and the law of total probability we have):
+\begin{align}
+    p_t^*(i)&= f(s_t=i \vert Y_{1:T},X_{1:T}) \notag \\
+            &=\frac{f(s_t=i,Y_{1:T},X_{1:T})}{\sum_{j=1}^{N}f(Y_{1:T},X_{1:T},S_t=j)} \notag \\
+            &=\frac{f(Y_{t+1:T},X_{t+1:T} \vert Y_{1:t},X_{1:t},S_t=i  )f(X_{1:t},Y_{1:t},S_t=i)}{\sum_{j=1}^{N}f(Y_{t+1:T},X_{t+1:T} \vert Y_{1:t},X_{1:t},S_t=j  )f(X_{1:t},Y_{1:t},S_t=j)} \notag \\
+            &=\frac{f(Y_{t+1:T},X_{t+1:T} \vert X_{t},S_t=i  )f(X_{1:t},Y_{1:t},S_t=i)}{\sum_{j=1}^{N}f(Y_{t+1:T},X_{t+1:T} \vert X_{t},S_t=j  )f(X_{1:t},Y_{1:t},S_t=j)} \notag \\
+            &=\frac{b_t(i)a_t(i)}{\sum_{j=1}^{N}b_t(j)a_t(j)}.
+\end{align}
+Finally the smoothed transition probabilities can be calculated as:
+\begin{align}
+    p_t^*(i,j)&=f(s_{t-1},s_t=j\vert Y_{1:T},X_{1:T}) \notag \\
+              &=\frac{f(Y_{t+1:T},X_{t+1:T}\vert S_{t}=j,S_{t-1}=i,Y_{1:t},X_{1:t})f(Y_{1:t},X_{1:t},S_{t-1}=i,S_t=j)}{\sum_{k=1}^{N}f(Y_{1:T},X_{1:T},S_t=k)} \notag \\
+              &=\frac{f(Y_{t+1:T},X_{t+1:T}\vert S_{t}=j,S_{t-1}=i,Y_{1:t},X_{1:t})f(Y_{1:t},X_{1:t},S_{t-1}=i,S_t=j)}{\sum_{k=1}^{N}b_t(k)a_t(k)} \notag \\
+              &=\frac{f(Y_{t+1:T},X_{t+1:T}\vert S_{t}=j,X_t)f(Y_t\vert S_{t-1}=i,S_t=j,Y_{1:t-1},X_{1:t})f(S_{t-1}=i,S_t=j,Y_{1:t-1},X_{1:t})}{\sum_{k=1}^{N}b_t(k)a_t(k)} \notag \\
+              &=\frac{b_t(j)f(Y_t\vert S_t=j,X_t)f(S_t=j\vert S_{t-1}=i,Y_{1:t-1},X_{1:t})f(S_{t-1}=i,Y_{1:t-1},X_{1:t})}{\sum_{k=1}^{N}b_t(k)a_t(k)} \notag \\
+              &=\frac{b_t(j)f(Y_t\vert S_t=j,X_t)p_{ij}f(X_t\vert S_{t-1}=i,Y_{1:t-1},X_{1:t-1})f(S_{t-1}=i,Y_{1:t-1},X_{1:t-1})}{\sum_{k=1}^{N}b_t(k)a_t(k)} \notag \\
+              &=\frac{b_t(j)f(Y_t\vert S_t=j,X_t)p_{ij}f(X_t\vert X_{t-1})a_{t-1}(i)}{\sum_{k=1}^{N}b_t(k)a_t(k)}
+\end{align}
+\newpage
+\noindent This concludes the derivation of the exogenous extension to the HMM model. Importantly the forward-backward algorithm as well as the likelihood function has been modified to allow for the exogenous regressor.  
+
+\end{document}

@@ -1,0 +1,150 @@
+% !TeX spellcheck = da_DK
+\documentclass[11pt,a4paper,oneside]{article}
+
+% Overordnet opsætning
+\setlength\parindent{24pt}
+\setlength\parskip{3pt}
+\setlength{\headheight}{14pt}
+\renewcommand{\baselinestretch}{1.5}
+
+\usepackage[utf8]{inputenc}
+\usepackage[danish,english]{babel}
+\usepackage{amsfonts,amsmath} %math: align og gather mm.; fonts: flere forskellige symboler
+\usepackage[left=2cm, right=2cm, bottom=2cm]{geometry}
+\usepackage{enumitem} %anvendes til Ã¦ndring i itemize mm.
+\usepackage{fancyhdr} %Opsaening af sidehoved og -fod
+\usepackage{lastpage} % Side "x af X".
+\usepackage[ocgcolorlinks,linkcolor=black]{hyperref}
+\usepackage{indentfirst} %"Indent" efter section og chapters etc.
+\usepackage{graphicx} % for plotting graphs in matrix
+\usepackage{subcaption} % figure "footnotes"
+\usepackage[font=small,compatibility=false]{caption}
+\usepackage[nottoc,numbib]{tocbibind}    
+
+% bibliography
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+% Ændring af titler
+\usepackage{sectsty}
+\subsectionfont{\normalfont\bfseries}
+\subsubsectionfont{\itshape}
+
+%Rstudio pakker
+\usepackage[svgnames]{xcolor}
+\usepackage{listings}
+
+\lstset{language=R,
+basicstyle=\scriptsize\ttfamily,
+commentstyle=\ttfamily\color{gray},
+numbers=left,
+numberstyle=\ttfamily\color{gray}\footnotesize,
+stepnumber=1,
+numbersep=5pt,
+backgroundcolor=\color{white},
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+frame=single,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+breakatwhitespace=false,
+title=\lstname,
+escapeinside={},
+keywordstyle={},
+morekeywords={}
+}
+
+% fancy table
+\usepackage{booktabs}
+\usepackage{multirow}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\rightmark}
+\lfoot{\author}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%symbolforkortelser
+\newcommand{\lll}{\mathcal{L}}
+\newcommand{\LL}{\Leftrightarrow}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\rb}{\right]}
+\newcommand{\lb}{\left[}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\cc}{\mathbb{C}}
+\newcommand{\aaa}{\mathbf{A}}
+\newcommand{\ee}{\mathbf{E}}
+\newcommand{\ff}{\mathcal{F}}
+\newcommand{\ggg}{\mathcal{G}}
+\newcommand{\hh}{\mathcal{H}}
+\newcommand{\pp}{\mathcal{P}}
+\newcommand{\qq}{\mathcal{Q}}
+\newcommand{\vv}{\mathbf{V}}
+\newcommand{\rr}{\mathbf{R}}
+\newcommand{\nn}{\mathbf{N}}
+\newcommand{\zz}{\mathbf{Z}}
+\newcommand{\yy}{\mathbf{Y}}
+\newcommand{\nnn}{\mathcal{N}}
+\newcommand{\ii}{\mathbf{1}}
+\newcommand{\bs}{\text{BS}}
+\newcommand{\sumn}{\sum_{i=1}^n}
+\renewcommand{\theequation}{1.\arabic{equation}}
+\DeclareMathOperator*{\argmin}{\arg\,\min}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\selectlanguage{english}
+
+\lstset{language=R}
+
+% Environment for theorems etc.
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}{Assumption}
+\newtheorem{proof}{Proof}
+\newtheorem{mydef}{Definition}
+
+% Colour citation links (otherwise they are luminescent green)
+\hypersetup{colorlinks,linkcolor={black},citecolor={black},urlcolor={black}} 
+
+% TOC depth
+\setcounter{tocdepth}{2}
+
+\title{The Investor's Problem: a Python script walk through}
+\author{William Gram (khj784) \& Kristian Strand (lpq119)}
+\date{\today}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+
+\newpage
+
+\pagenumbering{roman}
+\rfoot{\thepage}
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Theory}
+\subsection{\textit{The Model}}
+\noindent
+
+
+\section{Bibliography}
+
+
+\end{document}
