@@ -144,7 +144,7 @@ morekeywords={}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\section{Data}
+\section{Data}\label{datasection}
 \subsection{Data introduction}
 \noindent In the following section we will describe the data used to fit our HMM model. The goal is to achieve a data set which reflects the full investment universe for institutional as well as retail investors. As we are restricted in terms of data availability, we choose to focus on U.S. return data only. Our analysis can easily be extended to reflect a more global investment universe if one have access to global return data on various asset classes.   
 
@@ -163,19 +163,17 @@ In the following we will provide a description of the asset classes that we are 
 \includegraphics[scale=1]{images/Sharpes.pdf}
 \begingroup
 \vspace{4mm}
-\subcaption*{\textit{For data description we refer to section \ref{datadescription} and for definitions of returns we refer to section \ref{descriptivesection}}}
+\subcaption*{For data description we refer to section \ref{datadescription} and for definitions of returns and volatility we refer to section \ref{descriptivesection}}
 \endgroup
 \end{figure}
-
-
 
 \subsection{Data description}\label{datadescription}
 
 \subsection*{Investment Grade Bond Index}
-\noindent We will work with the " Bloomberg Barclays US Credit Total Return Index (LUACRTRUU:IND)", which we will refer to as the "IG index". The index is an unhedged \$-index. IG bonds are rated Baa3/BBB-/BBB- or higher using the middle rating of Moody's, S\&P and Fitch. The US corporate IG market is currently around \$5 trillion. With a total US corporate credit market of roughly \$7.5 trillions this amounts to 68\% of the total US corporate credit market\cite{Bloomberg}. In the next section in table \ref{returnstats} we present historical excess log-return statistics for each asset class.
+\noindent We will work with the " Bloomberg Barclays US Credit Total Return Index (LUACRTRUU:IND)", which we will refer to as the "IG index". The index is an unhedged \$-index. IG bonds are rated Baa3/BBB-/BBB- or higher using the middle rating of Moody's, S\&P and Fitch. The US corporate IG market is currently around \$5 trillion. With a total US corporate credit market of roughly \$7.5 trillions this amounts to 68\% of the total US corporate credit market\cite{Bloomberg}. 
 
 \subsection*{High-Yield Bond Index}
-\noindent In contrast to the relatively low-risk IG space, we will work with the "Bloomberg Barclays US Corporate High Yield Total Return Index (LF98TRUU:IND)", which we will refer to as the "HY index". The index is an unhedged \$-index, comprised of HY bonds denominated in \$ with a mininum size of \$150mn. The index dates back to july 1983 for monthly data and to august 1998 with daily data. HY bonds are corporate bonds, which middle rating of Moody's, Fitch and S\&P, is Ba1/BB+/BB+ or below. Pre the 80's HY bonds were bonds of outstanding fallen angles. i.e former investment grade companies that had been downgraded. Today HY bonds are often used to finance strategic mergers and acquisitions or  by leveraged-buy-out firms to provide means of capital for highly leveraged companies. From 1998 to 2018 the US HY bond market expanded almost six fold\cite{Pimpco}. According to Bloomberg the current total size of the US corporate debt market is \$7.5 trillion of which 16.1\% (\$1.21 trillion) are HY bonds. Leveraged Loans represent roughly the same as high yield bonds, while the remaining 68\% are investment grade bonds\cite{Bloomberg}. We have chosen not to include leveraged loans in our analysis. We are aware that leveraged loans and HY bonds are not perfect substitutes for an investor, however we believe that they are similar enough to not affect conclusions substantially.         
+\noindent In contrast to the relatively low-risk IG space, we will work with the "Bloomberg Barclays US Corporate High Yield Total Return Index (LF98TRUU:IND)", which we will refer to as the "HY index". The index is an unhedged \$-index, comprised of HY bonds denominated in \$ with a mininum size of \$150mn. The index dates back to july 1983 for monthly data and to august 1998 with daily data. HY bonds are corporate bonds, which middle rating of Moody's, Fitch and S\&P, is Ba1/BB+/BB+ or below. Pre the 80's HY bonds were bonds of outstanding fallen angles. i.e former investment grade companies that had been downgraded. Today HY bonds are often used to finance strategic mergers and acquisitions or  by leveraged-buy-out firms to provide means of capital for highly leveraged companies. From 1998 to 2018 the US HY bond market expanded almost six fold\cite{Pimco}. According to Bloomberg the current total size of the US corporate debt market is \$7.5 trillion of which 16.1\% (\$1.21 trillion) are HY bonds. Leveraged Loans represent roughly the same as high yield bonds, while the remaining 68\% are investment grade bonds\cite{Bloomberg}. We have chosen not to include leveraged loans in our analysis. We are aware that leveraged loans and HY bonds are not perfect substitutes for an investor, however we believe that they are similar enough to not affect conclusions substantially.         
 
 \subsection*{Russell 1000 and Russell 2000}
 \noindent To reflect that large cap stocks and small cap stocks offers two different investment opportunities, we will work with two stock indices, namely Russell 1000 and Russel 2000, which are both subsets of the broader Russell 3000. Russel 3000 is a broad U.S stock index and represents approximately 98\% of the U.S. public equity market.     
@@ -183,28 +181,55 @@ In the following we will provide a description of the asset classes that we are 
 Russell 1000 is a U.S. large-cap stock index  composed of approximately 1,000 of the largest U.S. companies. It represents roughly 90\% of the total market capitalisation of all listed U.S. stocks and is considered one of the leading large cap indicators on equal footing with S\&P500 and NASDAQ Composite. We will work with the "Russell 1000 Total Return (INDEXRUSSELL:RUITR)", which assumes dividends are reinvested. Russel 2000 is a U.S. small-cap stock index. The index represents 8\% of the public U.S. sotkc market and serves as a benchmark for U.S. small-cap stocks. As with Russell 1000 we will use the total return index, namely "Russell 2000 Total Return (INDEXRUSSELL:RUTTR)". 
 
 \subsection*{Commodities}
-\noindent We will make use of the "Bloomberg Commodity Index Total Return Index (BCOMTR:IND)", which we will refer to as the "commodity index". The index is made up of 22 exchange-traded futures on 20 physical commodities. It is weighted to account for economic significance and market liquidity. As per december 2018 crude brent oil and gold represent 8.5\% and 11.57\%, respectively. 
+\noindent We will make use of the "Bloomberg Commodity Index Total Return Index (BCOMTR:IND)", which we will refer to as the "commodity index". The index is made up of 22 exchange-traded futures on 20 physical commodities. It is weighted to account for economic significance and market liquidity. As per December 2018 crude brent oil and gold represent 8.5\% and 11.57\%, respectively. 
 
 \subsection*{Risk free rate}
-\noindent In choosing the risk free rate  we follow common practice in academia and use the yield on short term government bills\cite{riskfreerate}. Specifically we will follow Fama and French and use the 1-Month TBill rate from Ibbotson and Associates Inc, which is provided from Kenneth French's database. 
+\noindent In choosing the risk free rate  we follow common practice in academia and use the yield on short term government bills\cite{riskfreerate}. Specifically we will follow Fama and French and use the 1-Month TBill rate from Ibbotson and Associates Inc, which is provided by Kenneth French in his database. 
 
+Figure (\ref{index_levels}) shows the different asset classes with monthly closing prices from August 31. 1983 to December 31. 2018. It is indexed with August 31. 1983 = 100. There are 426 observations per asset class in this 35.5 year time series i.e it contains observations for every single month. Investors earned high return for U.S. stock markets with ending values for S\&P500, Russel 1000, and Russel 2000 of 3631, 2883 and 1555 respectively. Interestingly, the HY index performed better than Russel 2000 with an ending value of 1944. The worst performer is the commodities index which ended at 298. All stock markets commenced two sharp falls, namely around the millennium and around 2007-09 where also the commodity index and the two bond indices fell sharply.       
+\begin{figure}[ht]
+\center
+\vspace{5mm}
+\caption{Index values for US asset classes 1983-2018}
+\label{index_levels}
+\includegraphics[scale=0.9]{images/Prices.pdf}
+\begingroup
+\subcaption*{\textit{Source: Bloomberg}}
+\endgroup
+\end{figure}
+
+
+\clearpage
 \subsection{Descriptive statistics}\label{descriptivesection}
-\noindent In this section we consider the empirical moments of our asset classes. We will not assume any data generating processes for the asset class returns. Consequently, we are not suggesting that the empirical estimates are expressions for the population moments. We will define the empirical moments in the following way.
-\vspace{-7mm}
+
+\subsection*{Definition of returns}
+\noindent In choosing the definition of returns, the preferred way is a measure which reflects the return an investor would receive on an investment. In empirical research three price change quantities appear, namely
+\vspace{-5mm}
+\begin{align}
+    r_t^* &= p_t-p_{t-1}  \label{abschange} \\
+    r_t^{'} &= (p_t-p_{t-1})/p_{t-1} \label{relchange} \\
+    r_t   &= \ln{p_t}-\ln{p_{t-1}} \label{logreturns},
+\end{align}
+where $p_t$ denotes the price of an asset at time t. Note that since all of the indices above are inclusive of dividends (where applicable), the returns above does reflect the full return an investor receives. (\ref{abschange}) is the first difference of prices and depends on the price units. Furthermore the variance of this type of return is proportional to the level. For these reasons we will not  consider (\ref{abschange}) further. (\ref{relchange}) clearly denotes the one-period return on an investment for period t. When interest is paid $n$ times in one period, the equivalent rate to $r_t^{'}$ is the number $i_n$ that solves $(1+(i_n/n)^n)=1+r_t^{'}$. In the limit where $n\rightarrow \infty$, i.e. when interest is continuously compounded, $i_n$ is equal to $\ln{(1+r_t^{'})}=\ln{p_t}-\ln{p_{t-1}}=r_t$. That is, (\ref{logreturns}) is the continuously compounded return for period t. The measures $r_t^{'}$ and $r_t$ are very similar numbers and the choice between the two are very likely not to affect any important conclusions\cite{Taylor}. One neat quality of $r_t$ is that the multi-period returns are the sum of the single period returns. Throughout this paper we will use definition (\ref{logreturns}) as our returns. 
+
+\subsection*{Summary statistics}
+\noindent The statistical characteristics of the distribution of a set of returns can be summarised by empirical moments. We will not assume any data generating processes for the asset class returns in this section. Consequently, we are not suggesting that the empirical estimates are expressions for the population moments. We will summarise the return processes using the four empirical moments, mean ($\hat{\Bar{r}}$), standard deviation ($\sigma$), skewness ($\widehat{\text{skew}}$) and kurtosis ($\widehat{\text{kurt}}$). For a set of n returns \{ $r_1, r_2,...,r_T$\}, collected from a given asset class $a$, these moments are defined as 
 \begin{gather}
-    r_{t,a}=(\ln{p_{t,a}}-\ln{p_{t-1,a}})\cdot 100
-    \\
     \hat{\Bar{r}}_a=\frac{1}{T}\sum_{t=1}^{T}r_{t,a}, \qquad \hat{\sigma}= \sqrt{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}}_a)^2} \label{meanvol} \\ 
     \widehat{\text{skew}}_a=\frac{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}}_a)^3}{\lb\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}}_a)^2\rb^{3/2}}
     , \qquad \widehat{\text{kurt}}_a=\frac{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}}_a)^4}{\lb\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}}_a)^2\rb^{2}} \label{skewkurt},
 \end{gather}
-where $a \in \{1,2,...,A\}$ denotes asset class a. Additionally, we will consider the auto correlation function (ACF) to shed light on time dependency in the return processes. We will consider two ACFs, namely that of returns and that of absolute returns. The advantage of considering the ACF for absolute returns rather than squared returns is, that it only requires existence of fourth order moments rather than eight order moments (find kilde på dette vedrører sandsynligvis Hölders teorem). The two ACFs are defined as:
+where $a \in \{1,2,...,A\}$ denotes asset class a. In addition to the monthly average, we will consider returns over a period of one year. Due to the additive nature of the log returns, we annualise by multiplying the monthly log return by a factor of 12\cite{Favero}. To shed light on time dependency in the return processes we will consider two auto correlation functions (ACF), namely that of returns and that of absolute returns. The advantage of considering the ACF for absolute returns rather than squared returns is, that it only requires existence of fourth order moments rather than eight order moments (find kilde på dette. Vedrører sandsynligvis Hölders teorem). The two ACFs are defined as:
 \begin{align}
     \text{ACF}_a(h,r_t)&= \frac{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}})(r_{t-h,a}-\hat{\Bar{r}})}{\sqrt{\frac{1}{T}\sum_{t=1}^{T}(r_{t,a}-\hat{\Bar{r}})^2}\sqrt{\frac{1}{T}\sum_{t=1}^{T}(r_{t-h,a}-\hat{\Bar{r}})^2}} \label{acf} ,  \\
     \text{ACF}_a(h,\vert {r_t} \vert) &= \frac{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t,a} \vert-\vert\hat{\Bar{r}}\vert)(\vert r_{t-h,a}\vert-\vert\hat{\Bar{r}}\vert)}{\sqrt{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t,a}\vert-\vert\hat{\Bar{r}}\vert)^2}\sqrt{\frac{1}{T}\sum_{t=1}^{T}(\vert r_{t-h,a}\vert-\vert\hat{\Bar{r}}\vert)^2}} \label{acfabs}. 
 \end{align}
 
-\noindent Applying the moment estimates as defined in equation (\ref{meanvol})-(\ref{skewkurt}) to the monthly excess returns we generate table \ref{descriptive_statistics}. Monthly excess mean returns span from -0.04\% for the commodity index to 0.55\% for S\&P500. The monthly standard deviation spans between 1.6\% for the IG index to 5.6\% for Russell 2000. All asset classes exhibit negative skewness in returns while the excess kurtosis indicates heavy tails of the return distribution. These findings are in line with literature in financial time series e.g. Taylor (2011)\cite{Taylor}.           
+\noindent Applying the moment estimates as defined in equation (\ref{meanvol})-(\ref{skewkurt}) to the monthly excess returns we generate table \ref{descriptive_statistics}. The "mean" collumn thus reflects the risk premium for the given asset class, which span from -0.04\% for the commodity index to 0.55\% for S\&P500. On an annualised basis this span is equal to -0.43\% to 6.6\%. The equity risk premium found on S\&P500, Russell 1000 and Russell 2000 is in accordance with other findings, for example Ilmanen (2011) reports that the historical annual excess returns of U.S. stocks over short-dated bills is 4\% to 6\% and about 2\% higher if arithmetic means are used\cite{ilmanen}.
+
+The monthly standard deviation spans between 1.6\% for the IG index to 5.6\% for Russell 2000. Our finding that small cap stocks are more volatile than large cap stocks is a common finding. Hawawini and Keim (1995) finds that U.S. value-weighted portfolios have increasing standard deviation, from 4.1\% per month to 6.8\% per month, when decreasing firm size \cite{Hawawin}. We annualise the standard deviation by multiplying with a factor of $\sqrt{12}$, which requires monthly returns to be uncorrelated. We shall later see, that empirically this seems to be true. 
+
+Skewness statistics can be used to assess the symmetry of the distribution. A perfect symmetric distribution has skewness of zero. All asset classes in table \ref{descriptive_statistics} exhibit negative skewness. Kurtosis statistics can be used to assess how heavy tails of the return distributions are. The normal distribution has a kurtosis of 3. All kurtosis statistics reported in table \ref{descriptive_statistics} are in excess of 3. Hence all asset classes have heavy tails, with extreme observations happening more often that what the normal distribution would prescribe. All the above findings are in line with literature in fiancial time series e.g. Taylor (2011)\cite{Taylor}.           
 
 \begin{table}[h!]
 \centering
@@ -213,7 +238,7 @@ where $a \in \{1,2,...,A\}$ denotes asset class a. Additionally, we will conside
 \label{descriptive_statistics}
 \begin{tabular}{lrrrrrr}
 \toprule
-{} &    mean &     std &  ann. mean &  ann. std &  kurtosis &  skewness \\
+{} &    mean &     std &  ann. mean &  ann. std &  kurt &  skew \\
 \midrule
 High Yield       &  0.4052 &  2.3925 &     4.8619 &    8.2879 &   10.1555 &   -1.1786 \\
 Investment Grade &  0.3297 &  1.5647 &     3.9570 &    5.4204 &    3.4863 &   -0.4526 \\
@@ -228,38 +253,31 @@ Risk Free        &  0.2931 &  0.2324 &     3.5167 &    0.8050 &   -0.8818 &    0
 Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the normal distribution}
 \end{table}
 
-\noindent Figure \ref{index_levels} presents each asset class indexed with July 31 1983=100
+\noindent One conclusion from table \ref{descriptive_statistics} is that at first glance, the return processes we consider are non-normal. In the following we shall see more evidence of that. Figure \ref{mthexret} - \ref{acfabsillu} is a graphical inspection of each asset class' return process. Figure \ref{mthexret} shows the monthly excess returns while figure \ref{mthexretvol} shows monthly volatility of the excess return. There are clear signs of volatility clustering, something first observed by Mandelbrot (1963), who described the phenomena as "\textit{large changes tend to be followed by large changes - of either sign - and small changes tend to be followed by small changes}"\cite{mandelbrot}. Hence in choosing a model for asset returns, the model should at least accommodate for volatility clustering. 
+
+Figure \ref{returndens} shows the distribution of the monthly log returns for each asset class, compared to the normal distribution shown in black. The figure illustrates some of the already discussed characteristics of the return processes. The empirical distributions are negatively skewed with heavier tails than the normal distribution. An additional take away from figure \ref{returndens} is that the empirical distributions are more peaked than the corresponding normal distribution. 
+
+Figure \ref{acfillu} is the sample ACF for each asset class' return, as defined in \ref{acf} and with $h=30$. The sample ACF for returns are generally negligible for all time lags $h$. Almost all estimates are in the interval $[-0.1 , 0.1]$ with a few exceptions. Hence any linear dependence in the stochastic process generating these monthly returns must be considered small. Finally, figure \ref{acfabsillu} is the sample ACF for absolute returns. These estimates are more substantial than the corresponding estimates for returns and illustrates that monthly returns are not generated by an i.i.d. process. The model generating these returns have nonlinear dependency and any attempt to model the return processes should accommodate for this type of dependency.
+We conclude the data description by confirming that our data are in accordance with the three stylised facts about financial time series\cite{Taylor} 
+\begin{enumerate}
+    \item The distributions of monthly returns are not normal. 
+    \item There is almost no correlation between returns, in the same asset class, for different months.
+    \item There is a positive correlation between absolute returns for different nearby months.
+\end{enumerate}
+Any satisfactory statistical model must be consistent with these three stylised facts. 
 
 
-
-   
-
-
+\subsection{A formal normality test}
+\noindent It is a well known stylised fact that financial data is non-normal and the informal inspection in the previous section pointed towards the same conclusion. To formally test for normality in the data generating process of asset returns, we will use D’Agostino-Pearson test.    
 
 
-
-
-
-
-
-\clearpage
-
-\begin{figure}[ht]
-\center
-\caption{Index values for US asset classes 1983-2018}
-\vspace{-0mm}
-\label{index_levels}
-\includegraphics[scale=1]{images/Prices.pdf}
-\begingroup
-\subcaption*{\textit{Source: Bloomberg}}
-\endgroup
-\end{figure}
 
 
 \clearpage
 
 \begin{figure}[p]
     \caption{Monthly excess returns}
+    \label{mthexret}
     \makebox[\linewidth]{
         \includegraphics[width=1\linewidth ]{images/ExcessReturns.pdf}
         }
@@ -271,6 +289,7 @@ Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the norma
 
 \begin{figure}[p]
     \caption{Monthly Volatility}
+    \label{mthexretvol}
     \makebox[\linewidth]{
         \includegraphics[width=1\linewidth ]{images/Vol.pdf}
         }
@@ -282,6 +301,7 @@ Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the norma
 
 \begin{figure}[p]
     \caption{Densities of monthly excess returns}
+      \label{returndens}
     \makebox[\linewidth]{
         \includegraphics[width=1\linewidth ]{images/Densities.pdf}
         }
@@ -293,6 +313,7 @@ Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the norma
 
 \begin{figure}[p]
     \caption{Auto correlation function for monthly returns}
+    \label{acfillu}
     \makebox[\linewidth]{
         \includegraphics[width=1\linewidth ]{images/Autocorrelation.pdf}
         }
@@ -317,90 +338,17 @@ Period: Aug. 31 1983 to Dec. 31 2018. \\ Kurtosis is excess of that of the norma
 
 
 
-\noindent The graphical inspection in figure \ref{mth_returns}-\ref{autocorr} shows that all returns, to some extent, exhibit volatility clustering. That is especially clear around the peak of the financial crisis in 2008-09 and for most asset classes also in the mid-late 1980's probably explained by "black Monday in 1987" and "black Friday in 1989". Furthermore, a graphical comparison of returns to their corresponding normal distributions indicates that returns are non-normal and are negatively skewed with fat tails. The (linear) auto correlation functions of returns indicates very little to no auto correlation at all. The conclusion to the graphical inspection is that the data exhibit the stylised facts for financial data, i.e. heavy tails, absence of auto correlation but with non-linear dependencies (among others through the second moment)\cite{Cont}.  
+%\noindent The graphical inspection in figure \ref{mth_returns}-\ref{autocorr} shows that all returns, to some extent, exhibit volatility clustering. That is especially clear around the peak of the financial crisis in 2008-09 and for most asset classes also in the mid-late 1980's probably explained by "black Monday in 1987" and "black Friday in 1989". Furthermore, a graphical comparison of returns to their corresponding normal distributions indicates that returns are non-normal and are negatively skewed with fat tails. The (linear) auto correlation functions of returns indicates very little to no auto correlation at all. The conclusion to the graphical inspection is that the data exhibit the stylised facts for financial data, i.e. heavy tails, absence of auto correlation but with non-linear dependencies (among others through the second moment)\cite{Cont}.  
 
 
 
 
 
-\subsection{Normality test and the need for more sophisticated models}
-\noindent It is a well known stylised fact that financial data is non-normal and the informal inspection in the previous section pointed towards the same conclusion. To formally test for normality in the data generating process of asset returns, we will use D’Agostino-Pearson test.    
 
 
   
 \clearpage  
   
-
-
-\clearpage
-
-\begin{figure}[ht]
-\center
-\caption{Monthly returns from 1983-2018}
-\vspace{-0mm}
-\label{mth_returns}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/ExcessReturns.pdf}
-\begingroup
-\vspace{-14mm}
-\subcaption*{\textit{Source: Bloomberg and own calculations}}
-\endgroup
-\end{figure}
-
-\clearpage
-
-\begin{figure}[ht]
-\center
-\caption{Monthly volatility from 1983-2018}
-\vspace{-0mm}
-\label{mth_vol}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/Vol.png}
-\begingroup
-\vspace{-14mm}
-\subcaption*{\textit{Source: Bloomberg and own calculations}}
-\endgroup
-\end{figure}
-
-\clearpage
-
-\begin{figure}[ht]
-\center
-\caption{Distribution of monthly returns from 1983-2018}
-\vspace{-0mm}
-\label{returns_dist}
-\includegraphics[width=\textwidth,height=500pt]{images/return_distributions.png}
-\begingroup
-\vspace{-14mm}
-\subcaption*{\textit{Source: Bloomberg and own calculations}}
-\endgroup
-\end{figure}
-
-\clearpage
-
-
-\begin{figure}[ht]
-\center
-\caption{Autocorrelation functions}
-\vspace{-0mm}
-\label{autocorr}
-\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/autocorr_fct.png}
-\begingroup
-\vspace{-5mm}
-\subcaption*{\textit{Source: Bloomberg and own calculations}}
-\endgroup
-\end{figure}
-
-
-
-\clearpage
-
-
-
-
-
-   
-%We consider US return data for several asset classes, which reflects a large part of the potential investment universe for both institutional and retail investors.   
-
-%https://intelligent.schwab.com/public/intelligent/insights/whitepapers/asset-allocation.html
 
 \printbibliography[heading=none]
 

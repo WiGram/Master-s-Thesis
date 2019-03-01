@@ -1,0 +1,631 @@
+% !TeX spellcheck = da_DK
+\documentclass[11pt,a4paper,oneside]{article}
+\usepackage[paper=portrait,pagesize]{typearea}
+
+% Overordnet opsætning
+\setlength\parindent{24pt}
+\setlength\parskip{3pt}
+\setlength{\headheight}{14pt}
+\renewcommand{\baselinestretch}{1.7}
+
+\usepackage[utf8]{inputenc}
+\usepackage[danish,english]{babel}
+\usepackage{amsfonts,amsmath} %math: align og gather mm.; fonts: flere forskellige symboler
+\usepackage[left=2cm, right=2cm, bottom=2cm]{geometry}
+\usepackage{enumitem} %anvendes til Ã¦ndring i itemize mm.
+\usepackage{fancyhdr} %Opsaening af sidehoved og -fod
+\usepackage{lastpage} % Side "x af X".
+\usepackage[ocgcolorlinks,linkcolor=black]{hyperref}
+\usepackage{indentfirst} %"Indent" efter section og chapters etc.
+\usepackage{graphicx} % for plotting graphs in matrix
+\usepackage{subcaption} % figure "footnotes"
+\usepackage[font=small,compatibility=false]{caption}
+\usepackage[nottoc,numbib]{tocbibind}    
+\usepackage{ mathrsfs }
+\usepackage{bbold}
+\usepackage{setspace}
+\usepackage{rotating}
+\usepackage{lscape}
+\usepackage{arydshln}
+
+
+% bibliography
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+% Ændring af titler
+\usepackage{sectsty}
+\subsectionfont{\normalfont\bfseries}
+\subsubsectionfont{\itshape}
+
+%Rstudio pakker
+\usepackage[svgnames]{xcolor}
+\usepackage{listings}
+
+\lstset{language=R,
+basicstyle=\scriptsize\ttfamily,
+commentstyle=\ttfamily\color{gray},
+numbers=left,
+numberstyle=\ttfamily\color{gray}\footnotesize,
+stepnumber=1,
+numbersep=5pt,
+backgroundcolor=\color{white},
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+frame=single,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+breakatwhitespace=false,
+title=\lstname,
+escapeinside={},
+keywordstyle={},
+morekeywords={}
+}
+
+% fancy table
+\usepackage{booktabs}
+\usepackage{multirow}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\rightmark}
+\lfoot{\author}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%symbolforkortelser
+\newcommand{\lll}{\mathcal{L}}
+\newcommand{\LL}{\Leftrightarrow}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\rb}{\right]}
+\newcommand{\lb}{\left[}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\cc}{\mathbb{C}}
+\newcommand{\aaa}{\mathbf{A}}
+\newcommand{\ee}{\mathbf{E}}
+\newcommand{\ff}{\mathcal{F}}
+\newcommand{\ggg}{\mathcal{G}}
+\newcommand{\hh}{\mathcal{H}}
+\newcommand{\pp}{\mathcal{P}}
+\newcommand{\qq}{\mathcal{Q}}
+\newcommand{\vv}{\mathbf{V}}
+\newcommand{\rr}{\mathbf{R}}
+\newcommand{\nn}{\mathbf{N}}
+\newcommand{\zz}{\mathbf{Z}}
+\newcommand{\yy}{\mathbf{Y}}
+\newcommand{\nnn}{\mathcal{N}}
+\newcommand{\ii}{\mathbf{1}}
+\newcommand{\bs}{\text{BS}}
+\newcommand{\sumn}{\sum_{i=1}^n}
+\renewcommand{\theequation}{1.\arabic{equation}}
+\DeclareMathOperator*{\argmin}{\arg\,\min}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\selectlanguage{english}
+
+\lstset{language=R}
+
+% Environment for theorems etc.
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}{Assumption}
+\newtheorem{proof}{Proof}
+\newtheorem{mydef}{Definition}
+
+% Colour citation links (otherwise they are luminescent green)
+\hypersetup{colorlinks,linkcolor={black},citecolor={black},urlcolor={black}} 
+
+% TOC depth
+\setcounter{tocdepth}{2}
+
+\title{Data}
+\author{William Gram \& Kristian Strand}
+\date{\today}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+
+\newpage
+
+\pagenumbering{roman}
+\rfoot{\thepage}
+
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Univariate hidden markov models }
+\subsection{Model setup}
+\noindent In this section we will provide a short theoretical background for the univariate hidden markov model (HMM), which we will apply to the data described in section \ref{datasection}. The model in question allow the mean and volatility of the model to vary across K regimes driven by the latent variable $S_t$. We will denote the excess return at time t, $Y_t$. The model is given by    
+\begin{align}
+    Y_t=\mu_{S_t}+\sigma_{S_t}\varepsilon_t, \quad \varepsilon \sim N(0,1) \label{univarmodel}, 
+\end{align}
+for $t=1,2,..,T$. $S_t$ takes integer values between 1 and K and is a Markov chain. $\mu_{S_t}$ and $\sigma_{S_t}$ can take K values according to the finite state switching process $S_t$ on \{ 1,...,K\} with transition matrix  
+ \begin{align}\label{transprob}
+ P=\begin{bmatrix}
+    p_{11} &  \dots  & p_{N1} \\
+    \vdots &  \ddots & \vdots \\
+    p_{1N} &  \dots  & p_{NN} 
+\end{bmatrix},
+\end{align}
+where $p_{ij}=P(s_t=j \vert s_{t-1}=i)$. The rows in (\ref{transprob}) are restricted to sum to 1 by the law of total probability. The model parameters to be estimated is $\hat{\theta}=(\hat{\mu}_1,\hat{\mu}_2,...,\hat{\mu}_K,\hat{\sigma}_1,\hat{\sigma}_2,...,\hat{\sigma}_K,\hat{P})$, where the last row of $\hat{P}$ follows from estimation of the remaining probabilities in $P$. We will use the notation 
+\begin{align}
+    Y_T=(y_1,y_2,...,y_T), S_T=(s_1,s_2,...,s_T). \notag
+\end{align}
+Importantly, with $\varepsilon_t$ assumed to be Gaussian, the  probability of observing y conditional on the state, is given by
+\begin{align}
+    f_\theta(y_t\vert s_t=j)=\frac{1}{\sqrt{2\pi\sigma_j^2}}\exp{\lp-\frac{1}{2} \frac{(y_t-\mu_t)^2}{\sigma_j^2}\rp}\label{univargauss}.
+\end{align}
+Though the model looks simple, estimation of parameters is complicated. For the numerical procedure used for estimation of $\hat{\theta}$, we refer the reader to section X where we provide a theoretical foundation, for estimation of a more general HMM model. 
+
+\newpage
+
+\subsection{Application to data}  
+\noindent We apply the model defined in  (\ref{univarmodel})-(\ref{univargauss}) to our 5 asset classes. For each asset class we estimate the model with 1-5 regimes. For each model we will perform thorough specification testing, computing several information criteria and test statistics, to select the appropriate model for each asset class. In section [Model Selection] we provide the theoretical background for model selections in HMM models. When the appropriate model has been selected, we provide and discuss the estimates of that model. 
+
+\subsubsection*{High yield bonds}
+\noindent In table \ref{HY_spectest} we present the maximised log-likelihood value and we perform a number of the model specification tests that have discussed. The p-value of the likelihood ratio test concerning the number of regimes, have been adjusted for nuisance parameters as discussed in section [Model Selection]. 
+
+The maximised likelihood is given by the model with most states, in this case the 5-state model. The LR test for linearity rejects the null for all models with $K>1$. Additionally, the LR test for K=k with null of K=k-1 is also rejected for $k=2,3,4,5$. I.e. a 5 state model is preferred over the 4-state model etc., by the LR test. However in the 5-state model, a total of 30 parameters are estimated on the basis of 426 observations. This is equivalent to a saturation ratio of 14.2, which is, according to Guidolin, much less reassuring. None of the three information criteria provided in table \ref{HY_spectest} agree on the preferred model. The AIC points towards the large 5-state models while BIC points to a 2-state model. The HQ criterion, which can be seen as a compromise of the AIC and BIC, points towards a 3-state model. Finally, we consider the Regime Classification Measure (RCM) discussed in section [Model selection]. From the RCM it seems like the 2-state model is better at predicting with certainty, what state the high yield bond market is governed by, while a 3-state models is much more uncertain in regime inference. 
+
+At this point we are quite certain that a 2- or 3-state model will suffice. As one final specification test we will consider the pseudo residuals, of these two specifications, defined in section [Model Selection]. 
+
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Model specification for monthly excess \textbf{HIGH YIELD} returns}
+\label{HY_spectest}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model$_{M,S}$(K) &   
+\begin{tabular}[c]{@{}c@{}} Number of \\ parameters \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Log-Likelihood \\ value \end{tabular} & 
+AIC & 
+BIC & 
+HQC &
+RCM &
+\begin{tabular}[c]{@{}c@{}} Test for \\ linearity \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Z-score \\ normality test \end{tabular}
+\\
+\midrule
+Linear models &  &   &  & &   &  & \\
+\hspace{3mm} $HMM$(1) &  2 &  -971.15 & 1946.30  &   1954.40 & 1949.50  & -  & - & - \\
+
+\hspace{3mm} $HMMX$(1) &  3 & -  &  -   & -   &  - & -  & - & - \\ 
+
+2-State models & & & & & & &  \\ %\cdashline{1-8}
+
+\hspace{3mm}$HMM_{1,1}$(2) &  6 &  -873.19 & 1758.38
+ &   1782.69 & 1767.98 &  36.0  &  195.9
+ \small{(0.000)} & PASS(1**,1*,1*)  \\
+
+\hspace{3mm}$HMM_{0,1}$(2) &  4 & -874.95 &  1757.90 &  1774.11 & 1764.30 &  35.5 & 192.4 \small{(0.000)} & - \\
+
+\hspace{3mm}$HMM_{1,0}$(2) &  4  & -924.33 & 1856.66 & 1872.87 & 1863.06 &   0.88 & 93.6 \small{(0.000)} & PASS(0,0,0) \\
+
+\hspace{3mm}$HMMX_{1,1}$(2) &  7 & -870.17 & 1754.34 &  1782.70 & 1765.55 & 33.7 &  - \\
+
+3-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(3) & 12 &  -856.88 &  1737.20  &  1785.83  & 1756.41 & 56.19 & 228.5 \small{(0.000)} & - \\
+
+\hspace{3mm}$HMM_{0,1}$(3) &  9 &  -859.23 & 1736.46 & 1772.92 & 1750.86 & 64.38 & 223.8 \small{(0.000)} & \\
+
+\hspace{3mm}$HMM_{1,0}$(3) &  9 & -924.33
+ &  1866.67 & 1903.14 & 1881.08 &   0.93 & 93.6 \small{(0.000)} & \\
+
+\hspace{3mm}$HMMX_{1,1}$(3) & 13 &  -855.45 &   1736.89 &  1789.57 &  1757.70 &   56.35 &  - \\
+
+4-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(4) & 20 &  -843.67 &  1727.34  &  1808.38  &  1759.36 & 68.19 & 255.0 \small{(0.000)} \\
+
+\hspace{3mm}$HMM_{0,1}$(4) &  16 &  -859.18
+ &   1750.36  & 1815.19 & 1775.97  &  66.53 &  223.9 \small{(0.000)} & NM \\
+
+\hspace{3mm}$HMM_{1,0}$(4) &  16 & -924.33 &  1880.67 &  1945.50 & 1906.28
+ &  0.98 & 93.6 \small{(0.000)} & NM  \\
+
+\hspace{3mm}$HMMX_{1,1}$(4) & 21 &  -854.33 & 1750.67 & 1835.76  & 1784.28
+  &   71.0 &  - \\
+
+%5-State models & & & & & & &  \\
+
+% \hspace{3mm}$HMM_{1,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{0,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{1,0}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMMX_{1,1}$(5)& - & - & - & - & - & - & - & - \\
+\bottomrule
+\end{tabular}
+\caption*{M and S denotes whether $\mu$ or $\Sigma$ is switching. A 1 denotes that it is switching, while 0 means it is non-switching. All tests for linearity are against the corresponding linear one-state model. P-values for the linearity test are in parenthesis and have been adjusted for nuisance parameters. The last column shows whether or not the model passed the three z-score tests described in section [Model selection]. PASS(1,1,1) should be read as the z-score passed all three test while ** and * indicates a 1\% and 5\% significance level, respectively. PASS(0,0,0) indicates that the z-score null hypothesis could no bet rejected at 5\%.}
+\vspace{-20mm}
+\end{table}
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+ 
+
+
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+
+\subsubsection*{Investment grade bonds }
+
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Model specification for monthly excess \textbf{INVESTMENT GRADE} returns}
+\label{HY_spectest}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model$_{M,S}$(K) &   
+\begin{tabular}[c]{@{}c@{}} Number of \\ parameters \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Log-Likelihood \\ value \end{tabular} & 
+AIC & 
+BIC & 
+HQC &
+RCM &
+\begin{tabular}[c]{@{}c@{}} Test for \\ linearity \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Z-score \\ normality test \end{tabular}
+\\
+\midrule
+Linear models & & & & & & & \\
+\hspace{3mm} $HMM$(1) & 2 &  - & -  &   - & -  & -  & - & - \\
+
+\hspace{3mm} $HMMX$(1) & 3 & -  &  -   & -   &  - & -  & - & - \\ 
+
+2-State models & & & & & & &  \\ %\cdashline{1-8}
+
+\hspace{3mm}$HMM_{1,1}$(2) & 6 & -760.38 & 1532.77 & 1557.08 & 1542.37 & 16.58 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(2) & 4 & -760.66 & 1529.32 & 1545.53 & 1535.73 & 17.42 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(2) & 4 & -782.78 & 1573.57 & 1589.78 & 1579.97 & 0.16 & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(2)& 7 & -759.62 & 1533.23 & 1561.60 & 1544.44 & 17.74 & - & -  \\
+
+3-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(3) & 12 & -756.02 & 1536.04 & 1584.66 & 1555.25 & 12.52 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(3) & 9 & -759.76 & 1537.52 & 1573.98 & 1551.92 & 27.13 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(3) & 9 & -760.01 & 1538.02 & 1574.49 & 1552.43 & 8.66 & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(3)& 13 & -751.89 & 1529.78 & 1582.46 & 1550.59 & 10.8 & - & -  \\
+
+4-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(4) & 20 & -751.20 & 1542.39 & 1623.43 & 1574.41
+ & 76.55 & - & - \\
+
+\hspace{3mm}$HMM_{0,1}$(4) & 16 & -755.21 & 1542.43 & 1607.26 & 1568.04 & 47.45 & - & - \\
+
+\hspace{3mm}$HMM_{1,0}$(4) & 16 & -772.99 & 1577.99 & 1642.82 & 1603.60 & 0.28 & - & - \\
+
+\hspace{3mm}$HMMX_{1,1}$(4)& 21 & -754.08 & 1550.16 & 1635.25 & 1583.77 & 19.32 & - & -  \\
+
+%5-State models & & & & & & &  \\
+
+% \hspace{3mm}$HMM_{1,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{0,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{1,0}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMMX_{1,1}$(5)& - & - & - & - & - & - & - & - \\
+\bottomrule
+\end{tabular}
+\caption*{M and S denotes whether $\mu$ or $\Sigma$ is switching. A 1 denotes that it is switching, while 0 means it is non-switching. All tests for linearity are against the corresponding linear one-state model. P-values for the linearity test are in parenthesis and have been adjusted for nuisance parameters. The last column shows whether or not the model passed the three z-score tests described in section [Model selection]. PASS(1,1,1) should be read as the z-score passed all three test while ** and * indicates a 1\% and 5\% significance level, respectively. PASS(0,0,0) indicates that the z-score null hypothesis could no bet rejected at 5\%.}
+\vspace{-20mm}
+\end{table}
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+%--------------------------------------------------------------
+
+
+\subsubsection*{Commodities}
+
+
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Model specification for monthly excess \textbf{COMMODITIES} returns}
+\label{HY_spectest}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model$_{M,S}$(K) &   
+\begin{tabular}[c]{@{}c@{}} Number of \\ parameters \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Log-Likelihood \\ value \end{tabular} & 
+AIC & 
+BIC & 
+HQC &
+RCM &
+\begin{tabular}[c]{@{}c@{}} Test for \\ linearity \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Z-score \\ normality test \end{tabular}
+\\
+\midrule
+Linear models & & & & & & & \\
+\hspace{3mm} $HMM$(1) & - &  - & -  &   - & -  & -  & - & - \\
+
+\hspace{3mm} $HMMX$(1) & - & -  &  -   & -   &  - & -  & - & - \\ 
+
+2-State models & & & & & & &  \\ %\cdashline{1-8}
+
+\hspace{3mm}$HMM_{1,1}$(2) & 6 & -1173.21 & 2358.42 & 2382.73 & 2368.02 & 32.24 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(2) & 4 & -1174.27 & 2356.55 & 2372.76 & 2362.95 & 33.52 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(2) & 4 & -1200.38 & 2408.75 & 2424.96 & 2415.16 & 7.30 & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(2)& 7 & -1172.49 & 2358.98 & 2387.34 & 2370.18 & 30.55 & - & -  \\
+
+3-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(3) & 12 & -1162.31 & 2348.63 & 2397.25 & 2367.84 & 38.66 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(3) & 9 & -1165.13 & 2348.27 & 2384.74 & 2362.68 & 50.55 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(3) & 9 & -1181.51 & 2381.02 & 2417.49 & 2395.43 & 1.08 & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(3)& 13 & -1159.84 & 2345.68 & 2398.36 & 2366.49 & 27.89 & - & -  \\
+
+4-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(4) & 20 & -1162.52 & 2365.04 & 2446.08 & 2397.06 & 55.70 & - & - \\
+
+\hspace{3mm}$HMM_{0,1}$(4) & 16 & -1163.34 & 2358.68 & 2423.51 & 2384.29 & 41.04 & - & - \\
+
+\hspace{3mm}$HMM_{1,0}$(4) & 16 & -1200.33 & 2432.66 & 2497.50 & 2458.28
+ & NaN & - & NaN \\
+
+\hspace{3mm}$HMMX_{1,1}$(4)& 21 & -1160.90 & 2363.80 & 2448.90 & 2397.42 & 42.02 & - & -  \\
+
+%5-State models & & & & & & &  \\
+
+% \hspace{3mm}$HMM_{1,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{0,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{1,0}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMMX_{1,1}$(5)& - & - & - & - & - & - & - & - \\
+\bottomrule
+\end{tabular}
+\caption*{M and S denotes whether $\mu$ or $\Sigma$ is switching. A 1 denotes that it is switching, while 0 means it is non-switching. All tests for linearity are against the corresponding linear one-state model. P-values for the linearity test are in parenthesis and have been adjusted for nuisance parameters. The last column shows whether or not the model passed the three z-score tests described in section [Model selection]. PASS(1,1,1) should be read as the z-score passed all three test while ** and * indicates a 1\% and 5\% significance level, respectively. PASS(0,0,0) indicates that the z-score null hypothesis could no bet rejected at 5\%.}
+\vspace{-20mm}
+\end{table}
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
+
+
+
+
+\subsubsection*{Russel 2000}
+
+
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Model specification for monthly excess \textbf{RUSSELL2000} returns}
+\label{HY_spectest}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model$_{M,S}$(K) &   
+\begin{tabular}[c]{@{}c@{}} Number of \\ parameters \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Log-Likelihood \\ value \end{tabular} & 
+AIC & 
+BIC & 
+HQC &
+RCM &
+\begin{tabular}[c]{@{}c@{}} Test for \\ linearity \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Z-score \\ normality test \end{tabular}
+\\
+\midrule
+Linear models & & & & & & & \\
+\hspace{3mm} $HMM$(1) & - &  - & -  &   - & -  & -  & - & - \\
+
+\hspace{3mm} $HMMX$(1) & - & -  &  -   & -   &  - & -  & - & - \\ 
+
+2-State models & & & & & & &  \\ %\cdashline{1-8}
+
+\hspace{3mm}$HMM_{1,1}$(2) & 6 & -1297.05 & 2606.10 & 2630.42 & 2615.71 & 36.24 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(2) & 4 & -1302.02 & 2612.04 & 2628.25 & 2618.44 & 38.70 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(2) & 4 & -1307.82 & 2623.63 & 2639.84 & 2630.03 & 0.61 & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(2)& 7 & -1294.52 & 2603.03 & 2631.40 & 2614.24 & 39.26 & - & -  \\
+
+3-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(3) & 12 & -1291.31 & 2606.62 & 2655.24 & 2625.83 & 32.62 & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(3) & 9 & -1297.80 & 2613.60 & 2650.07 & 2628.00 & 54.20 & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(3) & 9 & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(3)& 13 & - & - & - & - & - & - & -  \\
+
+4-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(4) & 20 & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMM_{0,1}$(4) & 16 & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMM_{1,0}$(4) & 16 & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMMX_{1,1}$(4)& 21 & - & - & - & - & - & - & -  \\
+
+%5-State models & & & & & & &  \\
+
+% \hspace{3mm}$HMM_{1,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{0,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{1,0}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMMX_{1,1}$(5)& - & - & - & - & - & - & - & - \\
+\bottomrule
+\end{tabular}
+\caption*{M and S denotes whether $\mu$ or $\Sigma$ is switching. A 1 denotes that it is switching, while 0 means it is non-switching. All tests for linearity are against the corresponding linear one-state model. P-values for the linearity test are in parenthesis and have been adjusted for nuisance parameters. The last column shows whether or not the model passed the three z-score tests described in section [Model selection]. PASS(1,1,1) should be read as the z-score passed all three test while ** and * indicates a 1\% and 5\% significance level, respectively. PASS(0,0,0) indicates that the z-score null hypothesis could no bet rejected at 5\%.}
+\vspace{-20mm}
+\end{table}
+
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
+
+
+
+
+\subsubsection*{Russel 1000}
+
+
+
+
+
+\newpage
+\KOMAoptions{paper=landscape,pagesize}
+\recalctypearea
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Model specification for monthly excess [\textbf{INSERT NAME}] returns}
+\label{HY_spectest}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model$_{M,S}$(K) &   
+\begin{tabular}[c]{@{}c@{}} Number of \\ parameters \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Log-Likelihood \\ value \end{tabular} & 
+AIC & 
+BIC & 
+HQC &
+RCM &
+\begin{tabular}[c]{@{}c@{}} Test for \\ linearity \end{tabular} &
+\begin{tabular}[c]{@{}c@{}} Z-score \\ normality test \end{tabular}
+\\
+\midrule
+Linear models & & & & & & & \\
+\hspace{3mm} $HMM$(1) & - &  - & -  &   - & -  & -  & - & - \\
+
+\hspace{3mm} $HMMX$(1) & - & -  &  -   & -   &  - & -  & - & - \\ 
+
+2-State models & & & & & & &  \\ %\cdashline{1-8}
+
+\hspace{3mm}$HMM_{1,1}$(2) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(2) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(2) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(2)& - & - & - & - & - & - & - & -  \\
+
+3-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(3) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMM_{0,1}$(3) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMM_{1,0}$(3) & - & - & - & - & - & - & - & -  \\
+
+\hspace{3mm}$HMMX_{1,1}$(3)& - & - & - & - & - & - & - & -  \\
+
+4-State models & & & & & & &  \\ 
+
+\hspace{3mm}$HMM_{1,1}$(4) & - & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMM_{0,1}$(4) & - & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMM_{1,0}$(4) & - & - & - & - & - & - & - & - \\
+
+\hspace{3mm}$HMMX_{1,1}$(4)& - & - & - & - & - & - & - & -  \\
+
+%5-State models & & & & & & &  \\
+
+% \hspace{3mm}$HMM_{1,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{0,1}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMM_{1,0}$(5) & - & - & - & - & - & - & - & - \\
+
+% \hspace{3mm}$HMMX_{1,1}$(5)& - & - & - & - & - & - & - & - \\
+\bottomrule
+\end{tabular}
+\caption*{M and S denotes whether $\mu$ or $\Sigma$ is switching. A 1 denotes that it is switching, while 0 means it is non-switching. All tests for linearity are against the corresponding linear one-state model. P-values for the linearity test are in parenthesis and have been adjusted for nuisance parameters. The last column shows whether or not the model passed the three z-score tests described in section [Model selection]. PASS(1,1,1) should be read as the z-score passed all three test while ** and * indicates a 1\% and 5\% significance level, respectively. PASS(0,0,0) indicates that the z-score null hypothesis could no bet rejected at 5\%.}
+\vspace{-20mm}
+\end{table}
+
+
+\newpage
+\KOMAoptions{paper=portrait,pagesize}
+\recalctypearea
+
+
+
+
+
+
+
+
+
+
+
+
+
+\printbibliography[heading=none]
+
+\end{document}
