@@ -145,7 +145,7 @@ The theory of modern portfolio management is popularly stated to start with Mark
 To set up a formal problem, we assume an investment universe of $N$ stocks which each have constant variance $\sigma_i^2$ and expected return $\mu_i$, $i = 1, \dots, N$, respectively. Each stock has a weight of $\omega_i$ where $\sum_{i = 1}^N \omega_i = \omega'\mathbf{1} = 1$, where $\mathbf{1} = \lp 1, \dots, 1\rp'$. The return and variance on a portfolio is then given by:
 \begin{align*}
     \mu_p = \sum_{i=1}^N \omega_i \mu_i = \omega'\mu, &&
-    \sigma_p^2 = \sum_{i}^N \omega_i^2 \sigma_i^2 + 2 \sum_{i\neq j} \omega_i\omega_j \sigma_{ij}^N = \omega'\Omega \omega.
+    \sigma_p^2 = \sum_{i}^N \omega_i^2 \sigma_i^2 + 2 \sum_{i\neq j}^N \omega_i\omega_j \sigma_{ij} = \omega'\Omega \omega.
 \end{align*}
 
 Considering just two assets and no shorting, portfolios with different allocations in the two assets plotted in expected excess-returns, variance space is seen from figure \ref{plot:pfAllocExample} below.
@@ -155,15 +155,16 @@ Considering just two assets and no shorting, portfolios with different allocatio
 \vspace{4mm}
 \caption{Risk and return on portfolios of different investment universes}
 \label{plot:pfAllocExample}
-\includegraphics[scale=1]{images/pfAllocations.pdf}
+\includegraphics[scale=0.6]{images/pfAllocations.pdf}
 \begingroup
 \vspace{4mm}
-\subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000}
+\subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000.}
 \endgroup
 \end{figure}
 
-The four panels in figure 1 show us how an expansion of the investment universe allows for a broader palette of risk-reward profiles to be satisfied. The top left panel shows us an investment universe of two assets, providing an assortment of portfolio allocations on the efficient frontier. but only a very narrow part of this frontier.
+The four panels in figure 1 show us how an expansion of the investment universe allows for a broader palette of risk-reward profiles to be satisfied. The top left panel shows us an investment universe of two assets, which provide a narrow set of portfolio choices. The top right panel expands the investment universe by one asset, effectively providing portfolios with lower variance for profiles with less appetite for risk. The bottom left panel includes a fourth asset and substantially expands the portfolio choices available to an investor, which holds true even more so for five assets.
 
+Many of the suggested portfolios are inefficient. By definition, efficient portfolios lie on the efficient frontier. The efficient frontier is the set of portfolios which have highest expected excess return at each variance. The frontier starts at the portfolio with minimal variance, and rises to the right in a concave curve. Formally, we need to consider portfolio optimisation.
 
 \noindent
 
