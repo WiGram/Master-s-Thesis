@@ -1,0 +1,216 @@
+% !TeX spellcheck = da_DK
+\documentclass[11pt,a4paper,oneside]{article}
+
+% Overordnet opsætning
+\setlength\parindent{24pt}
+\setlength\parskip{3pt}
+\setlength{\headheight}{14pt}
+\renewcommand{\baselinestretch}{1.7}
+
+\usepackage[utf8]{inputenc}
+\usepackage[danish,english]{babel}
+\usepackage{amsfonts,amsmath} %math: align og gather mm.; fonts: flere forskellige symboler
+\usepackage[left=2cm, right=2cm, bottom=2cm]{geometry}
+\usepackage{enumitem} %anvendes til Ã¦ndring i itemize mm.
+\usepackage{fancyhdr} %Opsaening af sidehoved og -fod
+\usepackage{lastpage} % Side "x af X".
+\usepackage[ocgcolorlinks,linkcolor=black]{hyperref}
+\usepackage{indentfirst} %"Indent" efter section og chapters etc.
+\usepackage{graphicx} % for plotting graphs in matrix
+\usepackage{subcaption} % figure "footnotes"
+\usepackage[font=small,compatibility=false]{caption}
+\usepackage[nottoc,numbib]{tocbibind}    
+\usepackage{ mathrsfs }
+\usepackage{bbold}
+\usepackage{setspace}
+
+
+
+% bibliography
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
+
+% Ændring af titler
+\usepackage{sectsty}
+\subsectionfont{\normalfont\bfseries}
+\subsubsectionfont{\itshape}
+
+%Rstudio pakker
+\usepackage[svgnames]{xcolor}
+\usepackage{listings}
+
+\lstset{language=R,
+basicstyle=\scriptsize\ttfamily,
+commentstyle=\ttfamily\color{gray},
+numbers=left,
+numberstyle=\ttfamily\color{gray}\footnotesize,
+stepnumber=1,
+numbersep=5pt,
+backgroundcolor=\color{white},
+showspaces=false,
+showstringspaces=false,
+showtabs=false,
+frame=single,
+tabsize=2,
+captionpos=b,
+breaklines=true,
+breakatwhitespace=false,
+title=\lstname,
+escapeinside={},
+keywordstyle={},
+morekeywords={}
+}
+
+% fancy table
+\usepackage{booktabs}
+\usepackage{multirow}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{\rightmark}
+\lfoot{\author}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+%symbolforkortelser
+\newcommand{\lll}{\mathcal{L}}
+\newcommand{\LL}{\Leftrightarrow}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\rb}{\right]}
+\newcommand{\lb}{\left[}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\cc}{\mathbb{C}}
+\newcommand{\aaa}{\mathbf{A}}
+\newcommand{\ee}{\mathbf{E}}
+\newcommand{\ff}{\mathcal{F}}
+\newcommand{\ggg}{\mathcal{G}}
+\newcommand{\hh}{\mathcal{H}}
+\newcommand{\pp}{\mathcal{P}}
+\newcommand{\qq}{\mathcal{Q}}
+\newcommand{\vv}{\mathbf{V}}
+\newcommand{\rr}{\mathbf{R}}
+\newcommand{\nn}{\mathbf{N}}
+\newcommand{\zz}{\mathbf{Z}}
+\newcommand{\yy}{\mathbf{Y}}
+\newcommand{\nnn}{\mathcal{N}}
+\newcommand{\ii}{\mathbf{1}}
+\newcommand{\bs}{\text{BS}}
+\newcommand{\sumn}{\sum_{i=1}^n}
+\newcommand{\sumt}{\sum_{t=1}^T}
+\renewcommand{\theequation}{1.\arabic{equation}}
+\DeclareMathOperator*{\argmin}{\arg\,\min}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\selectlanguage{english}
+
+\lstset{language=R}
+
+% Environment for theorems etc.
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{assumption}{Assumption}
+\newtheorem{proof}{Proof}
+\newtheorem{mydef}{Definition}
+
+% Colour citation links (otherwise they are luminescent green)
+\hypersetup{colorlinks,linkcolor={black},citecolor={black},urlcolor={black}} 
+
+% TOC depth
+\setcounter{tocdepth}{2}
+
+\title{Data}
+\author{William Gram \& Kristian Strand}
+\date{\today}
+
+\begin{document}
+
+% -------------------- %
+\pagenumbering{arabic}
+\rfoot{\thepage}
+\setcounter{page}{1}
+% -------------------- %
+
+\section{Properties of the ML estimators}
+
+Having previously explained the EM-algorithm as an approach to finding the Maximum Likelihood parameters of the model, we now want to discuss the asymptotic properties of these parameters.
+
+It is by no means trivial that these estimators are well-behaved. Karlsen (1990) proved that univariate MS models with AR components are sufficiently well-behaved to have the asymptotic distribution of the ML parameters by the functional CLT. In 1992, Leroux then proved consistency in multivariate MS models with AR components. More formally, we recall that the ML estimator for a univariate MS model with no AR components is given by:
+\begin{align*}
+    \hat \theta = \lc \hat \mu_1, \hat \mu_2, \dots, \hat \mu_S, \hat \sigma_1^2, \hat \sigma_2^2, \dots, \hat \sigma_S^2, \hat p_11, \hat p_22, \dots, \hat p_SS\rc,
+\end{align*}
+where of course $\hat p_12, \dots, \hat p_1S, \hat p_21, \dots, \hat p_2S$ etc. are included.
+
+By the work of Leroux (1992) we then have, that the asymptotic distribution of the MLE is given by:
+\begin{align}
+    \sqrt{T}\lp \hat \theta - \theta\rp \overset{D}{\rightarrow} \nnn\lp 0, I_a\lp \theta\rp^{-1}\rp,
+\end{align}
+where $I_a$ is the asymptotic information matrix derived by taking the second derivative of the log-likelihood function, taken with respect to the model's parameters:
+\begin{align}
+    I_a\lp \theta\rp := \lim_{T\rightarrow \infty} - \ee\lb \frac{\partial^2 \frac{1}{T} \sumt\log \lp p\lp R_t\vert \theta\rp\rp}{\partial \theta\partial \theta'}\rb.
+\end{align}
+
+If the model is well-specified, the sample estimator of (1.2) can be approximated as the outer product of the scores, which are the first derivatives. This sample estimator is given by:
+\begin{align}
+    \Omega_S\lp \hat \theta\rp = \frac{1}{T}\sumt S_t\lp \hat \theta\rp S_t\lp \hat \theta\rp', \quad S_t\lp \hat \theta\rp \equiv \frac{\partial \log\lp p\lp R_t\vert \hat \theta \rp\rp}{\partial \theta}.
+\end{align}
+
+A second option is to approximate the second derivatives directly:
+\begin{align}
+    \Omega_I\lp \theta\rp := -\frac{1}{T}\sumt\frac{\partial^2 \log \lp p\lp R_t\vert \theta\rp\rp}{\partial \theta\partial \theta'}.
+\end{align}
+
+Finally, if the model is not well-specified, the "sandwich" estimator suggested by White (1982), which is typical in quasi-maximum likelihood estimation. This estimator is given by:
+\begin{align}
+    I_\text{Robust} = \frac{1}{T} \Omega_I\lp \hat \theta\rp \Omega_S^{-1}\lp \hat\theta\rp \Omega_I\lp \hat\theta\rp.
+\end{align}
+
+We will consider all three approaches for one time series to see how they differ and subsequently consider only the robust approach. As mentioned, if the three approaches differ substantially we are in fact being informed that the model is not well-specified, and in practice we are doing quasi-maximum likelihood.
+
+From the previous section, we repeat the log-likelihood function as:
+\begin{align}
+    L_{EM} = \sumt \sum_{j = 1}^N p_t^*\lp j\rp \log\lp f_\theta\rp + \sum_{t=2}^T p_t^*\lp i, j\rp \sum_{i,j=1}^N \log\lp p_{ij}\rp.
+\end{align}
+
+Taking the first derivatives of (1.6) with respect to the model parameters yields:
+\begin{align}
+    \frac{\partial L_{EM}}{\partial \mu_j} &= \sumt p_t^*\lp j\rp \frac{x_t - \mu_j}{\sigma_j^2} \\
+    \frac{\partial L_{EM}}{\partial \sigma_j} &= \sumt p_t^*\lp j\rp \lp - \frac{1}{2}\lp \frac{1}{\sigma_j^2} + \lp x_t - \mu_j\rp^2 \sigma_j^{-4}\rp\rp = -\frac{1}{2}\sumt p_t^*\lp j\rp \lp \frac{1}{\sigma_j^2} - \lp \frac{x_t - \mu_j}{\sigma_j^2}\rp^2\rp \\
+    \frac{\partial L_{EM}}{\partial p_{ij}} &= \sum_{t=2}^T p_t^*\lp i, j\rp \lp \frac{1}{p_{ij}} - \frac{1}{p_{iN}}\rp, \quad j \neq N,
+\end{align}
+where (1.9) follows from $p_{iN} = 1 - p_{i1} - p_{i2} - \dots - p_{iN-1}$. If $j = N$ then we isolate any of the other transition probabilities, e.g. $p_{i1}$ and (1.9) becomes:
+\begin{align}
+    \frac{\partial L_{EM}}{\partial p_{iN}} = \sum_{t=2}^T p_t^*\lp i, N\rp \lp\frac{1}{p_{iN}}-\frac{1}{pi1}\rp.
+\end{align}
+
+The resulting score is given by a column vector:
+\begin{align}
+    S_t\lp \hat\theta\rp = \lp \frac{\partial L_{EM, t}}{\partial \mu_1}, \frac{\partial L_{EM, t}}{\partial \mu_2}, \dots,\frac{\partial L_{EM, t}}{\partial \sigma_1}, \frac{\partial L_{EM, t}}{\partial \sigma_N},\dots, \frac{\partial L_{EM, t}}{\partial p_{11}}, \frac{\partial L_{EM, t}}{\partial p_{22}}, \dots, \frac{\partial L_{EM, t}}{\partial p_{NN}}\rp'
+\end{align}
+
+The outer product in (1.3) is then the outer product of the score as given by (1.11).
+
+The diagonal second-order derivatives are given by:
+\begin{align}
+    \frac{\partial^2 L_{EM}}{\partial^2 \mu_j} &= -\sumt p_t^*\lp j\rp \frac{x - \mu_j}{\sigma_j^4} \\
+    \frac{\partial^2 L_{EM}}{\partial^2 \sigma_j} &= \frac{1}{2}\sumt p_t^*\lp j\rp \lp \frac{1}{\sigma_j^4} + 2\lp \frac{x_t- \mu_j}{\sigma_j^4}\rp^2\rp \\
+    \frac{\partial^2 L_{EM}}{\partial^2 p_{ij}} &= \sum_{t=2}^T p_t^*\lp i, j\rp \lp \lp\frac{1}{1 - p_{iN}}\rp^2 - \lp \frac{1}{p_{ij}}\rp^2\rp, \quad j \neq N.
+\end{align}
+
+where again we refer to (1.10) for $j = N$. We also have off-diagonal elements:
+\begin{align}
+    \frac{\partial^2 L_{EM}}{\partial \sigma_j^2\partial \mu_j} &= - \sumt p_t^*\lp j\rp  \frac{x_t - \mu_j}{\sigma_j^4}\\
+    \frac{\partial^2 L_{EM}}{\partial \mu_j \partial \sigma_j^2} &= -\sumt p_t^*\lp j\rp \frac{x_t - \mu_j}{\sigma_j^4},
+\end{align}
+where the remaining off-diagonal elements are equal to zero ($
+    \frac{\partial^2 L_{EM}}{\partial \mu_i \partial \mu_j} = \frac{\partial^2 L_{EM}}{\partial \sigma_j^2 \partial \sigma_i^2} = \frac{\partial^2 L_{EM}}{\partial \mu_j \partial p_{ij}}=\frac{\partial^2 L_{EM}}{\partial \sigma_j^2 p_{ij}} = \frac{\partial^2 L_{EM}}{\partial p_{ij}\partial \mu_j} = \frac{\partial^2 L_{EM}}{\partial p_{ij}\partial \sigma_j} = \frac{\partial^2 L_{EM}}{\partial^2 p_{ij}} = \frac{\partial^2 L_{EM}}{\partial \mu_j \partial p_{ji}}=\frac{\partial^2 L_{EM}}{\partial \sigma_j^2 p_{ji}} = \frac{\partial^2 L_{EM}}{\partial p_{ji}\partial \mu_j} = \frac{\partial^2 L_{EM}}{\partial p_{ji}\partial \sigma_j} = \frac{\partial^2 L_{EM}}{\partial p_{ij}\partial p_{ji}} = 0$).
+    
+From these second-order derivatives, the information matrix is given by:
+[INSERT MATRIX WITH DIAGONAL DOUBLE-DERIVATIVES ETC.]
+
+\end{document}

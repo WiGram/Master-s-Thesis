@@ -5,7 +5,7 @@
 \setlength\parindent{24pt}
 \setlength\parskip{3pt}
 \setlength{\headheight}{14pt}
-\renewcommand{\baselinestretch}{1.5}
+\renewcommand{\baselinestretch}{1.7}
 
 \usepackage[utf8]{inputenc}
 \usepackage[danish,english]{babel}
@@ -20,6 +20,11 @@
 \usepackage{subcaption} % figure "footnotes"
 \usepackage[font=small,compatibility=false]{caption}
 \usepackage[nottoc,numbib]{tocbibind}    
+\usepackage{ mathrsfs }
+\usepackage{bbold}
+\usepackage{setspace}
+
+
 
 % bibliography
 \usepackage{csquotes}
@@ -118,8 +123,8 @@ morekeywords={}
 % TOC depth
 \setcounter{tocdepth}{2}
 
-\title{The Investor's Problem}
-\author{William Gram (khj784) \& Kristian Strand (lpq119)}
+\title{Theory for model specification}
+\author{William Gram \& Kristian Strand}
 \date{\today}
 
 \begin{document}
@@ -139,36 +144,10 @@ morekeywords={}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\section{Theory}
-The theory of modern portfolio management is popularly stated to start with Markowitz' 1952 article "Portfolio Selection" \cite{MPT52}. Prior to this date, investment in stocks was largely based on bond investment theory - invest in the perspective of discounted expected return, with dividend yield being used analogously to coupons on bonds \cite{guerard2016}. Inspired by von Neumann and Morgenstern's work from 1944 \cite{vnm1944} of utility maximisation under uncertainty, Markowitz declared that investment should be done under consideration of the uncertainty of future expected stock returns. Thus, Markowitz added a second dimension to the problem of maximising returns - minimising risk.
+\section{Model specification }
+\subsection{Model setup}
+\noindent In this section we will provide a short theoretical background for the univariate hidden markov model (HMM), which we will apply to the data described in section 
 
-To set up a formal problem, we assume an investment universe of $N$ stocks which each have constant variance $\sigma_i^2$ and expected return $\mu_i$, $i = 1, \dots, N$, respectively. Each stock has a weight of $\omega_i$ where $\sum_{i = 1}^N \omega_i = \omega'\mathbf{1} = 1$, where $\mathbf{1} = \lp 1, \dots, 1\rp'$. The return and variance on a portfolio is then given by:
-\begin{align*}
-    \mu_p = \sum_{i=1}^N \omega_i \mu_i = \omega'\mu, &&
-    \sigma_p^2 = \sum_{i}^N \omega_i^2 \sigma_i^2 + 2 \sum_{i\neq j} \omega_i\omega_j \sigma_{ij}^N = \omega'\Omega \omega.
-\end{align*}
-
-Considering just two assets and no shorting, portfolios with different allocations in the two assets plotted in expected excess-returns, variance space is seen from figure \ref{plot:pfAllocExample} below.
-
-\begin{figure}[ht]
-\centering
-\vspace{4mm}
-\caption{Risk reward profiles for US asset classes}
-\label{plot:pfAllocExample}
-\includegraphics[scale=1]{images/Sharpes.pdf}
-\begingroup
-\vspace{4mm}
-\subcaption*{For data description we refer to section \ref{datadescription} and for definitions of returns and volatility we refer to section \ref{descriptivesection}}
-\endgroup
-\end{figure}
-
-
-
-
-\noindent
-
-
-\section{Bibliography}
-
+\printbibliography[heading=none]
 
 \end{document}
