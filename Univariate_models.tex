@@ -149,35 +149,40 @@ morekeywords={}
 
 \section{Univariate hidden markov models }
 \subsection{Model setup}
-\noindent In this section we will provide a short theoretical background for the univariate hidden markov model (HMM), which we will apply to the data described in section \ref{datasection}. The model in question allow the mean and volatility of the model to vary across K regimes driven by the latent variable $S_t$. We will denote the excess return at time t, $Y_t$. The model is given by    
+\noindent In this section we will provide a short theoretical background for the univariate hidden markov model (HMM), which we will apply to the data described in section \ref{datasection}. The model in question allow the mean and volatility of the model to vary across $K$ regimes, driven by the latent variable $S_t$. The model can take exogenous regressors into account. Finally, the model is flexible such that we can restrict mean or variance to be constant across regimes. This model specification allow us to estimate and test a large battery of models and pick the most well specified model amongst this battery. 
+
+Let $Y_t$ denote the excess return, of a given asset, at time t. Then the model is given by    
 \begin{align}
-    Y_t=\mu_{S_t}+\sigma_{S_t}\varepsilon_t, \quad \varepsilon \sim N(0,1) \label{univarmodel}, 
+    Y_t=\mu_{S_t}+\beta X_t+\sigma_{S_t}\varepsilon_t, \quad \varepsilon \sim N(0,1) \label{univarmodel}, 
 \end{align}
-for $t=1,2,..,T$. $S_t$ takes integer values between 1 and K and is a Markov chain. $\mu_{S_t}$ and $\sigma_{S_t}$ can take K values according to the finite state switching process $S_t$ on \{ 1,...,K\} with transition matrix  
- \begin{align}\label{transprob}
+for $t=1,2,..,T$. $\beta$ can potentially be a vector of coefficients and $X_t$ a matrix of different exogenous regressors such that we can include several exogenous regressors. $S_t$ takes integer values between $1$ and $K$ and is assumed to be a stationary Markov chain (see section [Model Theory]). $\mu_{S_t}$ and $\sigma_{S_t}$ can take K values according to the finite state switching process $S_t$ on \{ 1,...,K\} with transition probability matrix  
+\vspace{-7mm}
+\begin{align}\label{transprob}
  P=\begin{bmatrix}
     p_{11} &  \dots  & p_{N1} \\
     \vdots &  \ddots & \vdots \\
     p_{1N} &  \dots  & p_{NN} 
 \end{bmatrix},
 \end{align}
-where $p_{ij}=P(s_t=j \vert s_{t-1}=i)$. The rows in (\ref{transprob}) are restricted to sum to 1 by the law of total probability. The model parameters to be estimated is $\hat{\theta}=(\hat{\mu}_1,\hat{\mu}_2,...,\hat{\mu}_K,\hat{\sigma}_1,\hat{\sigma}_2,...,\hat{\sigma}_K,\hat{P})$, where the last row of $\hat{P}$ follows from estimation of the remaining probabilities in $P$. We will use the notation 
+where $p_{ij}=P(s_t=j \vert s_{t-1}=i)$. The rows in (\ref{transprob}) are restricted to sum to 1 by the law of total probability. The model parameters to be estimated are thus $\hat{\theta}=(\hat{\mu}_1,\hat{\mu}_2,...,\hat{\mu}_K,\hat{\beta},\hat{\sigma}_1,\hat{\sigma}_2,...,\hat{\sigma}_K,\hat{P})$, where the last row of $\hat{P}$ follows from estimation of the remaining probabilities in $P$. Staying in the same notation as in section [Section Model Theory]  and with $\varepsilon_t$ assumed to be Gaussian, the  probability of observing $Y_t$ conditional on the state, is given by
 \begin{align}
-    Y_T=(y_1,y_2,...,y_T), S_T=(s_1,s_2,...,s_T). \notag
+    f_\theta(y_t\vert s_t=j)=\frac{1}{\sqrt{2\pi\sigma_j^2}}\exp{\lp-\frac{1}{2} \frac{(y_t-\mu_j-\beta X_t)^2}{\sigma_j^2}\rp}\label{univargauss}.
 \end{align}
-Importantly, with $\varepsilon_t$ assumed to be Gaussian, the  probability of observing y conditional on the state, is given by
-\begin{align}
-    f_\theta(y_t\vert s_t=j)=\frac{1}{\sqrt{2\pi\sigma_j^2}}\exp{\lp-\frac{1}{2} \frac{(y_t-\mu_t)^2}{\sigma_j^2}\rp}\label{univargauss}.
+From (1.3) it follows that the log-likelihood function is given by
+\begin{align}\label{univarloglik}
+    \ell(\theta)&=\sum_{t=1}^T \log \lp \sum_{i=1}^K  P(S_t=i \vert Y_{1:t-1} : \theta) f_\theta(y_t\vert S_t=j,X_t) \rp \notag \\
+    &=\sum_{t=1}^T \log \lp \sum_{i=1}^K  P(S_t=i \vert Y_{1:t-1} : \theta) \frac{1}{\sqrt{2\pi\sigma_i^2}}\exp{\lp-\frac{1}{2} \frac{(y_t-\mu_i-\beta X_t)^2}{\sigma_i^2}\rp} \rp.
 \end{align}
-Though the model looks simple, estimation of parameters is complicated. For the numerical procedure used for estimation of $\hat{\theta}$, we refer the reader to section X where we provide a theoretical foundation, for estimation of a more general HMM model. 
+(\ref{univarloglik}) is maximised using Hamilton's filter (or EM depending on outcome of Python script). The estimation is complicated by the fact that the latent variable is not observed as discussed in section [Section Model Theory] where we provide the theoretical background for estimating HMM models
 
-\newpage
 
 \subsection{Application to data}  
-\noindent We apply the model defined in  (\ref{univarmodel})-(\ref{univargauss}) to our 5 asset classes. For each asset class we estimate the model with 1-5 regimes. For each model we will perform thorough specification testing, computing several information criteria and test statistics, to select the appropriate model for each asset class. In section [Model Selection] we provide the theoretical background for model selections in HMM models. When the appropriate model has been selected, we provide and discuss the estimates of that model. 
+\noindent We apply the model defined in  (\ref{univarmodel})-(\ref{univarloglik}) to our 5 asset classes. For each asset class we estimate the model with 1-4 regimes. We have performed tests with 5 regimes as well, but these models are clearly not well behaved. 
+
+For each model we will perform thorough specification testing, computing several information criteria and test statistics, to select the appropriate model for each asset class. In section [Model Selection] we provide the theoretical background for model selections in HMM models. When the appropriate model has been selected, we provide and discuss the estimates of that model. 
 
 \subsubsection*{High yield bonds}
-\noindent In table \ref{HY_spectest} we present the maximised log-likelihood value and we perform a number of the model specification tests that have discussed. The p-value of the likelihood ratio test concerning the number of regimes, have been adjusted for nuisance parameters as discussed in section [Model Selection]. 
+\noindent In table \ref{HY_spectest} we present the maximised log-likelihood value and we perform a number of the model specification tests that we have discussed. The p-value of the likelihood ratio test concerning the number of regimes, have been adjusted for nuisance parameters as discussed in section [Model Selection]. 
 
 The maximised likelihood is given by the model with most states, in this case the 5-state model. The LR test for linearity rejects the null for all models with $K>1$. Additionally, the LR test for K=k with null of K=k-1 is also rejected for $k=2,3,4,5$. I.e. a 5 state model is preferred over the 4-state model etc., by the LR test. However in the 5-state model, a total of 30 parameters are estimated on the basis of 426 observations. This is equivalent to a saturation ratio of 14.2, which is, according to Guidolin, much less reassuring. None of the three information criteria provided in table \ref{HY_spectest} agree on the preferred model. The AIC points towards the large 5-state models while BIC points to a 2-state model. The HQ criterion, which can be seen as a compromise of the AIC and BIC, points towards a 3-state model. Finally, we consider the Regime Classification Measure (RCM) discussed in section [Model selection]. From the RCM it seems like the 2-state model is better at predicting with certainty, what state the high yield bond market is governed by, while a 3-state models is much more uncertain in regime inference. 
 
@@ -284,7 +289,7 @@ Linear models &  &   &  & &   &  & \\
 \centering
 \captionsetup{justification=centering,margin=0.6cm}
 \caption{Model specification for monthly excess \textbf{INVESTMENT GRADE} returns}
-\label{HY_spectest}
+\label{IG_spectest}
 \begin{tabular}{lrrrrrrrr}
 \toprule
 Model$_{M,S}$(K) &   
@@ -374,7 +379,7 @@ Linear models & & & & & & & \\
 \centering
 \captionsetup{justification=centering,margin=0.6cm}
 \caption{Model specification for monthly excess \textbf{COMMODITIES} returns}
-\label{HY_spectest}
+\label{COM_spectest}
 \begin{tabular}{lrrrrrrrr}
 \toprule
 Model$_{M,S}$(K) &   
@@ -458,7 +463,7 @@ Linear models & & & & & & & \\
 \centering
 \captionsetup{justification=centering,margin=0.6cm}
 \caption{Model specification for monthly excess \textbf{RUSSELL2000} returns}
-\label{HY_spectest}
+\label{R2000_spectest}
 \begin{tabular}{lrrrrrrrr}
 \toprule
 Model$_{M,S}$(K) &   
@@ -493,19 +498,20 @@ Linear models & & & & & & & \\
 
 \hspace{3mm}$HMM_{0,1}$(3) & 9 & -1297.80 & 2613.60 & 2650.07 & 2628.00 & 54.20 & - & -  \\
 
-\hspace{3mm}$HMM_{1,0}$(3) & 9 & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{1,0}$(3) & 9 & -1307.79 & 2633.58 & 2670.05 & 2647.99 & 5.18 & - & -  \\
 
-\hspace{3mm}$HMMX_{1,1}$(3)& 13 & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMMX_{1,1}$(3)& 13 & -1287.56 & 2601.11 & 2653.79 & 2621.92 & 40.84 & - & -  \\
 
 4-State models & & & & & & &  \\ 
 
-\hspace{3mm}$HMM_{1,1}$(4) & 20 & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{1,1}$(4) & 20 & -1282.06 & 2604.12 & 2685.16 & 2636.14
+ & 55.49 & - & - \\
 
-\hspace{3mm}$HMM_{0,1}$(4) & 16 & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{0,1}$(4) & 16 & -1294.08 & 2620.17 & 2685.00 & 2645.78 & NaN & - & - \\
 
-\hspace{3mm}$HMM_{1,0}$(4) & 16 & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{1,0}$(4) & 16 & -1306.01 & 2644.02 & 2708.85 & 2669.63 & 3.33 & - & - \\
 
-\hspace{3mm}$HMMX_{1,1}$(4)& 21 & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMMX_{1,1}$(4)& 21 & -1287.51 & 2617.03 & 2702.12 & 2650.64 & 45.24 & - & -  \\
 
 %5-State models & & & & & & &  \\
 
@@ -544,8 +550,8 @@ Linear models & & & & & & & \\
 \begin{table}[h!]
 \centering
 \captionsetup{justification=centering,margin=0.6cm}
-\caption{Model specification for monthly excess [\textbf{INSERT NAME}] returns}
-\label{HY_spectest}
+\caption{Model specification for monthly excess \textbf{RUSSEL1000} returns}
+\label{R1000_spectest}
 \begin{tabular}{lrrrrrrrr}
 \toprule
 Model$_{M,S}$(K) &   
@@ -566,33 +572,33 @@ Linear models & & & & & & & \\
 
 2-State models & & & & & & &  \\ %\cdashline{1-8}
 
-\hspace{3mm}$HMM_{1,1}$(2) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{1,1}$(2) & 6 & -1184.38 & 2380.76 & 2405.07 & 2390.37 & 49.35 & - & -  \\
 
-\hspace{3mm}$HMM_{0,1}$(2) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{0,1}$(2) & 4 & -1187.89 & 2383.79 & 2400.00 & 2390.19 & 41.91 & - & -  \\
 
-\hspace{3mm}$HMM_{1,0}$(2) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{1,0}$(2) & 4 & -1197.44 & 2402.87 & 2419.08 & 2409.27 & 8.09 & - & -  \\
 
-\hspace{3mm}$HMMX_{1,1}$(2)& - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMMX_{1,1}$(2)& 7 & -1181.63 & 2377.25 & 2405.62 & 2388.46 & 46.65 & - & -  \\
 
 3-State models & & & & & & &  \\ 
 
-\hspace{3mm}$HMM_{1,1}$(3) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{1,1}$(3) & 12 & -1174.34 & 2372.67 & 2421.30 & 2391.88 & 60.34 & - & -  \\
 
-\hspace{3mm}$HMM_{0,1}$(3) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{0,1}$(3) & 9 & -1186.59 & 2391.18 & 2427.65 & 2405.59 & 68.50 & - & -  \\
 
-\hspace{3mm}$HMM_{1,0}$(3) & - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMM_{1,0}$(3) & 9 & -1204.20 & 2426.40 & 2462.87 & 2440.81 & 61.18 & - & -  \\
 
-\hspace{3mm}$HMMX_{1,1}$(3)& - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMMX_{1,1}$(3)& 13 & -1179.14 & 2384.28 & 2436.96 & 2405.09 & 51.48 & - & -  \\
 
 4-State models & & & & & & &  \\ 
 
-\hspace{3mm}$HMM_{1,1}$(4) & - & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{1,1}$(4) & 20 & -1169.10 & 2378.20 & 2459.24 & 2410.22 & 46.37 & - & - \\
 
-\hspace{3mm}$HMM_{0,1}$(4) & - & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{0,1}$(4) & 16 & -1178.54 & 2389.08 & 2453.91 & 2414.69 & 75.56 & - & - \\
 
-\hspace{3mm}$HMM_{1,0}$(4) & - & - & - & - & - & - & - & - \\
+\hspace{3mm}$HMM_{1,0}$(4) & 16 & -1185.95 & 2403.91 & 2468.74 & 2429.52 & 10.51 & - & - \\
 
-\hspace{3mm}$HMMX_{1,1}$(4)& - & - & - & - & - & - & - & -  \\
+\hspace{3mm}$HMMX_{1,1}$(4)& 21 & -1170.94 & 2383.87 & 2468.97 & 2417.49 & 65.73 & - & -  \\
 
 %5-State models & & & & & & &  \\
 
