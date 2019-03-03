@@ -158,7 +158,7 @@ Many of the suggested portfolios are inefficient. By definition, efficient portf
         \omega'\mathbf{1} =& 1.
 \end{align}
 
-This problem can be solved by (reference: https://www.math.ust.hk/~maykwok/courses/ma362/Topic2.pdf) forming the Lagrangian function:
+This problem can be solved by (reference: http://web.math.ku.dk/~rolf/teaching/iff01/Ch9.pdf or https://www.math.ust.hk/~maykwok/courses/ma362/Topic2.pdf) forming the Lagrangian function:
 \begin{align}
     \lll\lp \omega; \lambda\rp = \frac{1}{2}\sum_{i,j=1}^N \omega_i \omega_j \sigma_{ij} - \lambda_1\lp \sum_{i=1}^N\omega_i - 1\rp - \lambda_2 \lp \sum_{i=1}^N \omega_i \mu_i - \mu_p\rp,
 \end{align}
@@ -238,7 +238,7 @@ Finally, inserting(1.12) into (1.10) we get a similar solution for $\lambda_1$:
 
 Inserting (1.12) and (1.13) into (1.7) we thus find the optimal portfolio weights for any desired variance:
 \begin{align}
-    \omega^* = \Omega^{-1}\lp \frac{c - \mu_p}{ac - b^2} \mathbf{1} + \frac{\mu_p a - b}{ac - b^2} \mu\rp
+    \omega^* = \Omega^{-1}\lp \frac{c - b \mu_p}{ac - b^2} \mathbf{1} + \frac{\mu_p a - b}{ac - b^2} \mu\rp
 \end{align}
 
 Finally, the portfolio variance for any portfolio return is given by:
@@ -252,21 +252,56 @@ Equation (1.15) is the efficient frontier - for any required return $\mu_p$ we c
     \sigma_p^2 = \frac{c - 2 \frac{b^2}{a} + a \frac{b^2}{a^2}}{ac - b^2} \LL \sigma_p^2 = \frac{ac - b^2}{a\lp ac - b^2\rp} = \frac{1}{a}.
 \end{align}
 
-Plotting the efficient frontier along with the global minimum variance yields the results in \ref{plot:efficientFrontier} below, where we are using the investment universe of the five assets from \ref{plot:pfAllocExample}.
+The portfolio weights producing the minimum variance can be deduced from equation (1.14):
+\begin{align}
+    \omega^*\lp \mu_p = \frac{b}{a}\rp = \Omega^{-1}\lp \frac{c - \frac{b}{a}}{ac - b^2} \mathbf{1} + \frac{\frac{b}{a} a - b}{ac - b^2} \mu\rp = \Omega^{-1} \frac{ac - b^2}{a\lp ac - b^2\rp}\mathbf{1} = \frac{1}{a}\Omega^{-1} \mathbf{1}.
+\end{align}
 
-\begin{comment}
-\begin{figure}[ht]
-\centering
-\vspace{4mm}
-\caption{Risk and return on portfolios of different investment universes}
+Plotting the efficient frontier along with the global minimum variance yields the results in \ref{plot:efficientFrontier} below, where we are using the investment universe of the five assets from \ref{plot:pfAllocExample}. The left panel shows a different, visibly narrower effective frontier from the efficient frontier. This is due to a restriction on short-selling. If we had included short-selling, as permitted in the right panel, an even larger array of portfolios can be constructed, and the efficient frontier then illustrates the bounds to this investment universe.
+
+\begin{figure}[!tbp]
 \label{plot:efficientFrontier}
-\includegraphics[scale=0.55]{images/efficientFrontier.pdf}
+\caption{Investment with and without short-selling.}
+\centering
+  \vspace{4mm}
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[scale=0.6]{images/efFrontier.pdf}
+  \end{minipage}
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[scale=0.6]{images/efFrontierShort.pdf}
+  \end{minipage}
+\subcaption*{HY: High Yield, C: Commodities, IG: Investment Grade, R2000: Russell 2000 and R1000: Russell 1000. }
 \begingroup
 \vspace{4mm}
-\subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000.}
 \endgroup
 \end{figure}
-\end{comment}
+
+In 1958, James Tobin introduced the concept of investing in a risk-free asset, using von Neumann and Morgenstern's work on utility theory as an argument \cite{tobin58}. The theory guides the investor in finding which of all the efficient portfolios to invest in. By introducing the risk-free asset, there is then one unique portfolio, the tangency portfolio, which optimises the investors return relative to risk.
+
+The risk-free asset is some asset which virtually has a known payoff with no risk of default. In practice this is often chosen to be a 30 day U.S. T-bill. When returns are subtracted by the return on this risk-free asset, we have excess returns. This is the return concept we have already been working with. Thus, when plotting the risk-free return in excess return, volatility space, it will intersect at (0,0). According to this theory, the optimal investment is then some linear combination of the risk-free asset and the tangency portfolio. If there is no shorting permitted, the combination is convex.
+
+The tangency portfolio can be found by simple algebra. We want to find the slope of the line starting at (0,0) which has tangency with the efficient frontier in $\rr^2_+$. To do this, we recall the Lagrangian problem formulated in (1.1) to (1.3). Here, we modify the second constraint, se we solve the following problem:
+\begin{align}
+    \min_{\omega} \frac{1}{2}\omega'\Omega\omega,\quad \text{ st. } \omega'\mu + \lp 1 - \omega'\mathbf{1}\rp r_{rf} = \mu_p,
+\end{align}
+
+where $r_{rf}$ denotes the risk free rate of return. Solving this in exactly the same manner as before gives the solution:
+\begin{align}
+    \mu_p = r + \sigma_p \sqrt{ar^2 - 2b + c}. 
+\end{align}
+
+At zero volatility, we simply have the risk free rate. As volatility is increased, so does the portfolio return. The line emanating from $r$ is coined the "Capital Market Line" (CML), and the tangency portfolio is found at CML = Efficient Frontier (EF). Because the efficient frontier was stated in terms of volatility as function of return, we reverse equation (1.19) to do the same:
+\begin{align*}
+    \sigma_p = \frac{\mu_p - r}{\sqrt{ar^2 - 2b + c}} \tag{CML} \\
+    \sigma_p = \frac{a\mu_p^2 - 2b\mu_p + c}{ac-b^2} \tag{EF}.
+\end{align*}
+
+Equating CML and EF leads to the following properties:
+\begin{align}
+    \mu_T = \frac{c - br}{b - ar}, \quad \sigma_T^2 = \frac{ar^2 - 2rb + c}{\lp b - ar\rp^2}, \quad \omega^*_T = \frac{\Omega^{-1}\lp \mu - r\mathbf{1}\rp}{b - ar}.
+\end{align}
+
+Adding the CML to the plot in \ref{plot:efficientFrontier} reveals the plot in figure \ref{plot:pfCML} below. The benefit is, that the investor can now reach a higher indifference curve for any portfolio different from the tangency portfolio, by making a linear combination of the risk-free asset and the tangency portfolio. If shorting is not allowed, any desired return larger than the tangency portfolio will have to be below the CML. If shorting is allowed, the investor can short the risk-free asset and follow the CML forever, in theory.
 
 
 \printbibliography[heading=none]
