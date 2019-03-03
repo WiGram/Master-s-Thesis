@@ -19,7 +19,8 @@
 \usepackage{graphicx} % for plotting graphs in matrix
 \usepackage{subcaption} % figure "footnotes"
 \usepackage[font=small,compatibility=false]{caption}
-\usepackage[nottoc,numbib]{tocbibind}    
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{verbatim} % comment out large blocks
 
 % bibliography
 \usepackage{csquotes}
@@ -117,29 +118,13 @@ morekeywords={}
 
 % TOC depth
 \setcounter{tocdepth}{2}
-
-\title{The Investor's Problem}
-\author{William Gram (khj784) \& Kristian Strand (lpq119)}
-\date{\today}
-
 \begin{document}
-
-\pagenumbering{gobble}
-\maketitle
-
-\newpage
-
-\pagenumbering{roman}
 \rfoot{\thepage}
-
-\tableofcontents
-
-\newpage
-
 \pagenumbering{arabic}
+
 \setcounter{page}{1}
 
-\section{Theory}
+\section{Investor's Problem: Theory}
 The theory of modern portfolio management is popularly stated to start with Markowitz' 1952 article "Portfolio Selection" \cite{MPT52}. Prior to this date, investment in stocks was largely based on bond investment theory - invest in the perspective of discounted expected return, with dividend yield being used analogously to coupons on bonds \cite{guerard2016}. Inspired by von Neumann and Morgenstern's work from 1944 \cite{vnm1944} of utility maximisation under uncertainty, Markowitz declared that investment should be done under consideration of the uncertainty of future expected stock returns. Thus, Markowitz added a second dimension to the problem of maximising returns - minimising risk.
 
 To set up a formal problem, we assume an investment universe of $N$ stocks which each have constant variance $\sigma_i^2$ and expected return $\mu_i$, $i = 1, \dots, N$, respectively. Each stock has a weight of $\omega_i$ where $\sum_{i = 1}^N \omega_i = \omega'\mathbf{1} = 1$, where $\mathbf{1} = \lp 1, \dots, 1\rp'$. The return and variance on a portfolio is then given by:
@@ -150,26 +135,142 @@ To set up a formal problem, we assume an investment universe of $N$ stocks which
 
 Considering just two assets and no shorting, portfolios with different allocations in the two assets plotted in expected excess-returns, variance space is seen from figure \ref{plot:pfAllocExample} below.
 
+\begin{comment}
 \begin{figure}[ht]
 \centering
 \vspace{4mm}
 \caption{Risk and return on portfolios of different investment universes}
 \label{plot:pfAllocExample}
-\includegraphics[scale=0.6]{images/pfAllocations.pdf}
+\includegraphics[scale=0.55]{images/pfAllocations.pdf}
 \begingroup
 \vspace{4mm}
 \subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000.}
 \endgroup
 \end{figure}
+\end{comment}
 
 The four panels in figure 1 show us how an expansion of the investment universe allows for a broader palette of risk-reward profiles to be satisfied. The top left panel shows us an investment universe of two assets, which provide a narrow set of portfolio choices. The top right panel expands the investment universe by one asset, effectively providing portfolios with lower variance for profiles with less appetite for risk. The bottom left panel includes a fourth asset and substantially expands the portfolio choices available to an investor, which holds true even more so for five assets.
 
-Many of the suggested portfolios are inefficient. By definition, efficient portfolios lie on the efficient frontier. The efficient frontier is the set of portfolios which have highest expected excess return at each variance. The frontier starts at the portfolio with minimal variance, and rises to the right in a concave curve. Formally, we need to consider portfolio optimisation.
+Many of the suggested portfolios are inefficient. By definition, efficient portfolios lie on the efficient frontier. The efficient frontier is the set of portfolios which have highest expected excess return at each variance. The frontier starts at the portfolio with minimal variance, and rises to the right in a concave curve. Formally, we need to consider portfolio optimisation. The optimisation problem is to find the set of portfolio weights that minimise variance subject to conditions, formally:
+\begin{align}
+    \min_\omega \ & \frac{1}{2} \omega'\Omega\omega,\\
+    \text{st. }\quad \omega'\mu =& \mu_P \\
+        \omega'\mathbf{1} =& 1.
+\end{align}
 
-\noindent
+This problem can be solved by (reference: https://www.math.ust.hk/~maykwok/courses/ma362/Topic2.pdf) forming the Lagrangian function:
+\begin{align}
+    \lll\lp \omega; \lambda\rp = \frac{1}{2}\sum_{i,j=1}^N \omega_i \omega_j \sigma_{ij} - \lambda_1\lp \sum_{i=1}^N\omega_i - 1\rp - \lambda_2 \lp \sum_{i=1}^N \omega_i \mu_i - \mu_p\rp,
+\end{align}
+
+where the first-order derivative with respect to $\omega_i$ is:
+\begin{align}
+    \lll_i'\lp \omega;\lambda\rp = \sum_{j=1}^N\omega_j\sigma_{ij} - \lambda_1 - \lambda_2 \mu_i.
+\end{align}
+
+Collecting each derivative $i$ in a vector we have:
+\begin{align}
+    \lll' =
+    \begin{pmatrix}
+        \lll_1'\lp \omega;\lambda\rp\\
+        \lll_2'\lp \omega;\lambda\rp\\
+        \vdots\\
+        \lll_N'\lp \omega;\lambda\rp
+    \end{pmatrix}
+    = 
+    \begin{pmatrix}
+        \sum_{j=1}^N\omega_j\sigma_{1j} - \lambda_1 - \lambda_2 \mu_1\\
+        \sum_{j=1}^N\omega_j\sigma_{2j} - \lambda_1 - \lambda_2 \mu_2\\
+        \vdots\\
+        \sum_{j=1}^N\omega_j\sigma_{Nj} - \lambda_1 - \lambda_2 \mu_N
+    \end{pmatrix}
+    = \omega ' \Omega - \lambda_1 \mathbf{1} - \lambda_2 \mu = \Omega \omega - \lambda_1 \mathbf{1} - \lambda_2 \mu,
+\end{align}
+
+where the final equality uses $\omega' \Omega = (\omega'\Omega)' = \Omega'\omega = \Omega \omega$, where the final equality then follows from the symmetry of the covariance matrix.
+
+Setting the Lagrangian to zero and isolating for portfolio weights $\omega$ we find, under the assumption of a positive definite covariance matrix $\Omega$, the following:
+\begin{align}
+    \lll'\lp \omega;\lambda \rp = 0 \LL \Omega \omega - \lambda_1 \mathbf{1} - \lambda_2 \mu = 0 \LL \omega = \Omega^{-1} \lp \lambda_1 \mathbf{1} + \lambda_2 \mu \rp.
+\end{align}
+
+Next, we need to find the values for $\lambda_1$ and $\lambda_2$. We can do this by rewriting (1.7) and apply the constraints in (1.2) and (1.3), respectively:
+\begin{align}
+    1 
+        = \mathbf{1}'\omega 
+        &= \mathbf{1}'\Omega^{-1} \lp \lambda_1 \mathbf{1} + \lambda_2 \mu \rp \notag \\
+        &= \lambda_1\mathbf{1}'\Omega^{-1}\mathbf{1} + \lambda_2 \mathbf{1}'\Omega^{-1} \mu, \\
+    \mu_p 
+        = \mu'\omega
+        &= \mu' \Omega^{-1} \lp \lambda_1 \mathbf{1} + \lambda_2 \mu \rp \notag \\
+        &= \lambda_1 \mu' \Omega^{-1} \mathbf{1} + \lambda_2 \mu' \Omega^{-1} \mu \notag \\
+        &= \lambda_1 \mathbf{1}' \Omega^{-1} \mu + \lambda_2 \mu' \Omega^{-1} \mu.
+\end{align}
+
+Then, to simplify, we define $a$, $b$ and $c$ by: $a = \mathbf{1}'\Omega^{-1} \mathbf{1}$, $b = \mathbf{1}'\Omega^{-1}\mu$ and $c = \mu'\Omega^{-1}\mu$. With a positive-definite covariance matrix, we note that $a, c > 0$ and $b \in \rr$. Equations (1.8) and (1.9) can then be reduced and isolate define $\lambda_1$ and $\lambda_2$:
+\begin{align}
+    1 &= \lambda_1 a + \lambda_2 b 
+    \LL 
+    \lambda_1  = \frac{1}{a}\lp 1 - \lambda_2 b\rp, \\
+    \mu_p &= \lambda_1 b + \lambda_2 c
+    \LL 
+    \lambda_2 = \frac{1}{c}\lp \mu_p - \lambda_1 b\rp.
+\end{align}
+
+Inserting (1.10) into (1.11) we can find $\lambda_2$ as a function of variance:
+\begin{align}
+    \lambda_2 
+        &= \frac{1}{c} \lp \mu_p - \frac{b}{a}\lp 1 - \lambda_2 b\rp\rp \notag 
+         = \frac{1}{ac}\lp \mu_p a - b + \lambda_2 b^2 \rp \notag \\
+    \LL \lambda_2 \lp 1 - \frac{b^2}{ac}\rp
+        &= \frac{1}{ac}\lp \mu_p a - b\rp \notag \\
+    \LL \lambda_2 
+        &= \frac{ac}{ac - b^2}\frac{1}{ac}\lp \mu_p a - b\rp \notag \\
+    \LL \lambda_2
+        &= \frac{\mu_p a - b}{ac - b^2}.
+\end{align}
+
+Finally, inserting(1.12) into (1.10) we get a similar solution for $\lambda_1$:
+\begin{align}
+    \lambda_1
+        = \frac{1}{a}\lp 1 - \frac{\mu_p a - b}{ac - b^2} b\rp = \frac{1}{a}\frac{ac - b^2 - \mu_p a b + b^2}{ac - b^2} = \frac{c - \mu_p b}{ac - b^2}.
+\end{align}
+
+Inserting (1.12) and (1.13) into (1.7) we thus find the optimal portfolio weights for any desired variance:
+\begin{align}
+    \omega^* = \Omega^{-1}\lp \frac{c - \mu_p}{ac - b^2} \mathbf{1} + \frac{\mu_p a - b}{ac - b^2} \mu\rp
+\end{align}
+
+Finally, the portfolio variance for any portfolio return is given by:
+\begin{align}
+    \sigma_p^2 = {\omega^*}'\Omega\omega^* = {\omega^*}' \Omega \Omega^{-1}\lp \lambda_1 \mathbf{1} + \lambda_2 \mu \rp = \lambda_1 {\omega^*}'\mathbf{1} + \lambda_2 {\omega^*}'\mu = \frac{\lp c - b \mu_p\rp + \lp a \mu_p - b\rp \mu_p}{ac - b^2} = \frac{c - 2b \mu_p + a \mu_p^2}{ac - b^2}.
+\end{align}
+
+Equation (1.15) is the efficient frontier - for any required return $\mu_p$ we can find the minimum variance. In addition, we can find the global minimum variance by differentiation:
+\begin{align}
+    \frac{\partial \sigma_p^2}{\partial \mu_p} = \frac{2a\mu_p - 2b}{ac - b^2} = 0\LL \mu_p = \frac{b}{a}, \notag\\
+    \sigma_p^2 = \frac{c - 2 \frac{b^2}{a} + a \frac{b^2}{a^2}}{ac - b^2} \LL \sigma_p^2 = \frac{ac - b^2}{a\lp ac - b^2\rp} = \frac{1}{a}.
+\end{align}
+
+Plotting the efficient frontier along with the global minimum variance yields the results in \ref{plot:efficientFrontier} below, where we are using the investment universe of the five assets from \ref{plot:pfAllocExample}.
+
+\begin{comment}
+\begin{figure}[ht]
+\centering
+\vspace{4mm}
+\caption{Risk and return on portfolios of different investment universes}
+\label{plot:efficientFrontier}
+\includegraphics[scale=0.55]{images/efficientFrontier.pdf}
+\begingroup
+\vspace{4mm}
+\subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000.}
+\endgroup
+\end{figure}
+\end{comment}
 
 
-\section{Bibliography}
+\printbibliography[heading=none]
+
 
 
 \end{document}
