@@ -135,7 +135,6 @@ To set up a formal problem, we assume an investment universe of $N$ stocks which
 
 Considering just two assets and no shorting, portfolios with different allocations in the two assets plotted in expected excess-returns, variance space is seen from figure \ref{plot:pfAllocExample} below.
 
-\begin{comment}
 \begin{figure}[ht]
 \centering
 \vspace{4mm}
@@ -147,7 +146,6 @@ Considering just two assets and no shorting, portfolios with different allocatio
 \subcaption*{Portfolios: 2 assets: High Yield (HY) and Russell 1000 (R1000), 3 assets: HY, Commodities (C) and R1000, 4 assets: HY, C, Investment Grade bonds (IG), and R1000, 5 assets: HY, C, IG, Russell 2000 (R2000) and R1000.}
 \endgroup
 \end{figure}
-\end{comment}
 
 The four panels in figure 1 show us how an expansion of the investment universe allows for a broader palette of risk-reward profiles to be satisfied. The top left panel shows us an investment universe of two assets, which provide a narrow set of portfolio choices. The top right panel expands the investment universe by one asset, effectively providing portfolios with lower variance for profiles with less appetite for risk. The bottom left panel includes a fourth asset and substantially expands the portfolio choices available to an investor, which holds true even more so for five assets.
 
@@ -270,7 +268,7 @@ Plotting the efficient frontier along with the global minimum variance yields th
   \begin{minipage}[b]{0.4\textwidth}
     \includegraphics[scale=0.6]{images/efFrontierShort.pdf}
   \end{minipage}
-\subcaption*{HY: High Yield, C: Commodities, IG: Investment Grade, R2000: Russell 2000 and R1000: Russell 1000. }
+\subcaption*{HY: High Yield, C: Commodities, IG: Investment Grade, R2000: Russell 2000 and R1000: Russell 1000.}
 \begingroup
 \vspace{4mm}
 \endgroup
@@ -302,6 +300,49 @@ Equating CML and EF leads to the following properties:
 \end{align}
 
 Adding the CML to the plot in \ref{plot:efficientFrontier} reveals the plot in figure \ref{plot:pfCML} below. The benefit is, that the investor can now reach a higher indifference curve for any portfolio different from the tangency portfolio, by making a linear combination of the risk-free asset and the tangency portfolio. If shorting is not allowed, any desired return larger than the tangency portfolio will have to be below the CML. If shorting is allowed, the investor can short the risk-free asset and follow the CML forever, in theory.
+
+\begin{figure}[ht]
+\centering
+\vspace{4mm}
+\caption{Capital Market Line and tangency portfolio}
+\label{plot:pfAllocTangency}
+\includegraphics[scale=0.6]{images/pfCMLtg.pdf}
+\begingroup
+\vspace{4mm}
+\subcaption*{HY: High Yield, C: Commodities, IG: Investment Grade, R2000: Russell 2000 and R1000: Russell 1000.}
+\endgroup
+\end{figure}
+
+The portfolio weights at the tangency portfolio are provided, together with risk and return, in table \ref{table:CMLanalysis} below. As mentioned and illustrated in figure 2, efficient frontier is based on portfolios which can hold shorted positions. To reach the tangency portfolio, indeed commodities and the Russell 2000 index have been shorted. The result is a portfolio with a rate of return approximate equal to High Yield bonds, but with volatility in closer resemblance with safer bonds in the investment grade index. Another crucial point is, that in order to reach a return close to that of Russell 1000, one must short the risk free asset. If this is possible for the investor, the investor effectively gets the return of the Russell 1000 index at half the volatility.
+
+\begin{table}[h!]
+\centering
+\captionsetup{justification=centering,margin=0.6cm}
+\caption{Properties of the tangency portfolio.}
+\label{table:CMLanalysis}
+\begin{tabular}{lrrrrrr}
+\toprule
+{}          &    HY     &   C       &   IG      &   R2000       &   R1000   &   Tangency portfolio   \\
+\midrule
+Portfolio weights   &   0.31906 &  -0.07443 &   0.72208 &   -0.13758    &   0.17087 &   1.00000     \\
+Mean Return         &   4.86    &  -0.44    &   3.96    &   4.23        &   5.44    &   4.79        \\
+Volatility          &   8.29    &  14.28    &   5.42    &   19.41       &   14.99   &   5.99        \\
+SR                  &   0.59    &  -0.03    &   0.73    &   0.22        &   0.36    &   0.80        \\
+\bottomrule
+\end{tabular}
+\caption*{Source: Bloomberg and own computations.
+Period: Aug. 31 1983 to Dec. 31 2018.}
+\end{table}
+
+Finally, it is useful to think of risk and reward under a different definition, owing its name to William F. Sharpe, namely the Sharpe ratio (SR) \cite{sharpe66}. This is a measure of excess returns per unit of volatility, and was first suggested by William F. Sharpe to measure e.g. fund performance. The SR is displayed in the last row of table \ref{table:CMLanalysis}. From this row, the tangency portfolio truly elicits the benefits of diversification. 
+
+In \ref{plot:pfAllocSR} below we have departed with analytic solutions to the efficient frontier, and instead computed numerically the efficient frontier under restrictions of no short-selling. The shade indicates the SR, where bright is positive. It is not possible to analytically find the tangency portfolio, as the effective frontier is found numerically.
+
+
+
+In the above discussion on the foundations of investment theory, little attention has been paid to utility. This will be covered in the next section.
+
+\subsection{Investing in utility}
 
 
 \printbibliography[heading=none]
